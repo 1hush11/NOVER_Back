@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\NOVER_Back.props" />
+</Project>
