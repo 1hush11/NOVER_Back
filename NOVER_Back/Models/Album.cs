@@ -17,6 +17,6 @@ public partial class Album
     public DateOnly? ReleaseDate { get; set; }
 
     public virtual Singer? Singer { get; set; }
-    [JsonIgnore]
+
     public virtual ICollection<Track> Tracks { get; set; } = new List<Track>();
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace NOVER_Back.Models;
 
@@ -17,6 +18,7 @@ public partial class Singer
 
     public int? SubscribersCount { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<Album> Albums { get; set; } = new List<Album>();
 
     public virtual ICollection<Track> Tracks { get; set; } = new List<Track>();

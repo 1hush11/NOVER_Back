@@ -5,106 +5,128 @@ using NOVER_Back.Models.DTOs;
 
 namespace NOVER_Back.Controllers
 {
-    [Route("API/[controller]")]
+    [Route("api/track")]
     [ApiController]
     public class TrackController : ControllerBase
     {
-        private NoverDbContext _context;
+        private readonly NoverDbContext _context;
+
         public TrackController(NoverDbContext context)
         {
             _context = context;
         }
-        private Track? _currentTrack { get; set; }
 
-        [HttpGet("Tracks")]
-        public ActionResult<IEnumerable<Track>> GetTracks()
+        [HttpGet("tracks")]
+        public async Task<ActionResult<IEnumerable<Track>>> GetTracks()
         {
-            List<Track> tracks = _context.Tracks.
-                Include(t => t.Album).
-                Include(t => t.Genre).ToList();
-            if (!tracks.Any())
-                return NotFound("Треки не найдены.");
-            return Ok(tracks);
-        }
-        [HttpGet("Tracks/id")]
-        public ActionResult<IEnumerable<Track>> GetTrackById(int id)
-        {
-            try
-            {
-                Track? track = _context.Tracks.
-                    Include(t => t.Album).
-                    Include(t => t.Genre).FirstOrDefault(t => t.Id == id);
-                if (track == null)
-                {
-                    return NotFound($"Трек с id {id} не найден.");
-                }
-                return Ok(track);
-            }
-            catch (DbUpdateException dbEx)
-            {
-                return StatusCode(500, $"Ошибка базы данных: {dbEx.Message}.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Произошла ошибка: {ex.Message}.");
-            }
-        }
-        [HttpGet("TopTracks")]
-        public ActionResult<IEnumerable<Track>> GetTopTracks()
-        {
-            int limit = 20;
-            List<Track> topTracks = _context.Tracks.OrderByDescending(t => t.PlayCount)
-                .Take(limit)
+            var tracks = await _context.Tracks
                 .Include(t => t.Album)
                 .Include(t => t.Genre)
-                .ToList();
+                .ToListAsync();
+
+            return tracks.Any() ? Ok(tracks) : NotFound("Треки не найдены.");
+        }
+
+        [HttpGet("tracks/{id}")]
+        public async Task<ActionResult<Track>> GetTrackById([FromRoute] int id)
+        {
+            var track = await _context.Tracks
+                .Include(t => t.Album)
+                .Include(t => t.Genre)
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            return track == null ? NotFound($"Трек с id {id} не найден.") : Ok(track);
+        }
+
+        [HttpGet("top")]
+        public async Task<ActionResult<IEnumerable<Track>>> GetTopTracks([FromQuery] int count = 10)
+        {
+            if (count <= 0 || count > 100)
+            {
+                return BadRequest("Количество треков должно быть от 1 до 100. Не испытывай судьбу.");
+            }
+
+            var topTracks = await _context.Tracks
+                .OrderByDescending(t => t.PlayCount)
+                .Include(t => t.Album)
+                .Include(t => t.Genre)
+                .Take(count)
+                .ToListAsync();
+
             if (!topTracks.Any())
             {
-                return NotFound($"Топ {20} найти не получилось.");
+                return NotFound($"Не найдено ни одного из топ {count} треков.");
             }
+
             return Ok(topTracks);
         }
-        [HttpPost("Track")]
-        public ActionResult<IEnumerable<Track>> AddTrack([FromBody] TrackDTO track)
+
+        [HttpPost("track")]
+        public async Task<ActionResult<Track>> AddTrack([FromBody] TrackDTO track)
         {
-            try
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (track.AlbumId.HasValue && !await _context.Albums.AnyAsync(a => a.Id == track.AlbumId))
+                return BadRequest($"Альбом с ID {track.AlbumId} не найден.");
+
+            if (track.GenreId.HasValue && !await _context.Genres.AnyAsync(g => g.Id == track.GenreId))
+                return BadRequest($"Жанр с ID {track.GenreId} не найден.");
+
+            var newTrack = new Track
             {
-                if (track.AlbumId.HasValue && !_context.Albums.Any(a => a.Id == track.AlbumId))
-                {
-                    return BadRequest($"Альбом с ID {track.AlbumId} не найден.");
-                }
+                Name = track.Name,
+                AlbumId = track.AlbumId,
+                Duration = track.Duration,
+                GenreId = track.GenreId,
+                ReleaseDate = track.ReleaseDate,
+                PlayCount = track.PlayCount ?? 0,
+                AudioUrl = track.AudioUrl,
+                CoverUrl = track.CoverUrl,
+                Status = track.Status
+            };
 
-                if (track.GenreId.HasValue && !_context.Genres.Any(g => g.Id == track.GenreId))
-                {
-                    return BadRequest($"Жанр с ID {track.GenreId} не найден.");
-                }
+            await _context.Tracks.AddAsync(newTrack);
+            await _context.SaveChangesAsync();
 
-                Track newTrack = new Track
-                {
-                    Name = track.Name,
-                    AlbumId = track.AlbumId,
-                    Duration = track.Duration,
-                    GenreId = track.GenreId,
-                    ReleaseDate = track.ReleaseDate,
-                    PlayCount = track.PlayCount ?? 0,
-                    AudioUrl = track.AudioUrl,
-                    CoverUrl = track.CoverUrl,
-                    Status = track.Status
-                };
+            return Ok(newTrack);
+        }
 
-                _context.Tracks.Add(newTrack);
-                _context.SaveChanges();
-
-                return Ok(newTrack);
-            }
-            catch (DbUpdateException dbEx)
+        [HttpPost("set_current/{id}")]
+        public async Task<IActionResult> SetCurrentTrack([FromRoute] int id)
+        {
+            var existingTrack = await _context.Tracks.FirstOrDefaultAsync(t => t.Id == id);
+            if (existingTrack != null)
             {
-                return StatusCode(500, $"Ошибка базы данных: {dbEx.Message}");
+                Response.Cookies.Append("currentTrackId", id.ToString(), new CookieOptions
+                {
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTimeOffset.UtcNow.AddHours(2)
+                });
+
+                return Ok($"Текущий трек установлен: {id}");
             }
-            catch (Exception ex)
+            else { return NotFound($"Трек с id {id} не найден."); }
+        }
+
+        [HttpGet("current")]
+        public async Task<ActionResult<Track>> GetCurrentTrack()
+        {
+            if (!Request.Cookies.TryGetValue("currentTrackId", out var trackIdStr) ||
+                !int.TryParse(trackIdStr, out var trackId))
             {
-                return StatusCode(500, $"Произошла ошибка: {ex.Message}");
+                return NotFound("Текущий трек не выбран.");
             }
+
+            var track = await _context.Tracks
+                .Include(t => t.Album)
+                .Include(t => t.Genre)
+                .FirstOrDefaultAsync(t => t.Id == trackId);
+
+            return track == null
+                ? NotFound("Текущий трек не найден.")
+                : Ok(track);
         }
     }
 }

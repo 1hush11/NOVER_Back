@@ -116,3 +116,4 @@ A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\Microsoft.Exten
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
+A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\NOVER_Back.sourcelink.json

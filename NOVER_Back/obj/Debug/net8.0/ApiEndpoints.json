@@ -1,15 +1,197 @@
 [
   {
-    "ContainingType": "NOVER_Back.Controllers.TrackController",
-    "Method": "GetTopTracks",
-    "RelativePath": "API/Track/TopTracks",
+    "ContainingType": "NOVER_Back.Controllers.AlbumController",
+    "Method": "DeleteAlbum",
+    "RelativePath": "api/album/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.AlbumController",
+    "Method": "AddAlbum",
+    "RelativePath": "api/album/add_album",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "albumDto",
+        "Type": "NOVER_Back.Models.DTOs.AlbumWithTrackDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NOVER_Back.Models.DTOs.AlbumWithTrackDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.AlbumController",
+    "Method": "GetAlbumById",
+    "RelativePath": "api/album/album/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NOVER_Back.Models.DTOs.AlbumWithTrackDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.AlbumController",
+    "Method": "GetAlbums",
+    "RelativePath": "api/album/albums",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[NOVER_Back.Models.Track, NOVER_Back, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[NOVER_Back.Models.DTOs.AlbumWithTrackDTO, NOVER_Back, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.SingerController",
+    "Method": "GetSingers",
+    "RelativePath": "api/singer/singers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[NOVER_Back.Models.DTOs.SingerDTO, NOVER_Back, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.SingerController",
+    "Method": "GetSingerWithTracks",
+    "RelativePath": "api/singer/singers/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.SingerController",
+    "Method": "SubscribeToSinger",
+    "RelativePath": "api/singer/subscribe/{singerId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "singerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.SingerController",
+    "Method": "GetTopSingers",
+    "RelativePath": "api/singer/top",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "count",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[NOVER_Back.Models.DTOs.SingerDTO, NOVER_Back, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.SingerController",
+    "Method": "UnsubscribeFromSinger",
+    "RelativePath": "api/singer/unsubscribe/{singerId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "singerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.TrackController",
+    "Method": "GetCurrentTrack",
+    "RelativePath": "api/track/current",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "NOVER_Back.Models.Track",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -21,16 +203,32 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.TrackController",
-    "Method": "AddTrack",
-    "RelativePath": "API/Track/Track",
+    "Method": "SetCurrentTrack",
+    "RelativePath": "api/track/set_current/{id}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "track",
-        "Type": "NOVER_Back.Models.DTOs.TrackDTO",
+        "Name": "id",
+        "Type": "System.Int32",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.TrackController",
+    "Method": "GetTopTracks",
+    "RelativePath": "api/track/top",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "count",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -47,8 +245,34 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.TrackController",
+    "Method": "AddTrack",
+    "RelativePath": "api/track/track",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "track",
+        "Type": "NOVER_Back.Models.DTOs.TrackDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NOVER_Back.Models.Track",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.TrackController",
     "Method": "GetTracks",
-    "RelativePath": "API/Track/Tracks",
+    "RelativePath": "api/track/tracks",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -68,7 +292,7 @@
   {
     "ContainingType": "NOVER_Back.Controllers.TrackController",
     "Method": "GetTrackById",
-    "RelativePath": "API/Track/Tracks/id",
+    "RelativePath": "api/track/tracks/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -76,12 +300,12 @@
       {
         "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": false
+        "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[NOVER_Back.Models.Track, NOVER_Back, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "NOVER_Back.Models.Track",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -93,8 +317,44 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "LogIn",
+    "RelativePath": "api/user/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "credentials",
+        "Type": "NOVER_Back.Models.DTOs.UserDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NOVER_Back.Models.User",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "LogOut",
+    "RelativePath": "api/user/logout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
     "Method": "GetCurrentUser",
-    "RelativePath": "API/User/GetCurrentUser",
+    "RelativePath": "api/user/me",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -113,39 +373,8 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.UserController",
-    "Method": "LogIn",
-    "RelativePath": "API/User/LogIn",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "login",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "password",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "NOVER_Back.Models.User",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.UserController",
     "Method": "SignUp",
-    "RelativePath": "API/User/SignUp",
+    "RelativePath": "api/user/signup",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -167,31 +396,5 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.UserController",
-    "Method": "UpdateUser",
-    "RelativePath": "API/User/UpdateUser",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "updatedUser",
-        "Type": "NOVER_Back.Models.DTOs.UserDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.HomeController",
-    "Method": "GetProducts",
-    "RelativePath": "GetProducts",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
   }
 ]
