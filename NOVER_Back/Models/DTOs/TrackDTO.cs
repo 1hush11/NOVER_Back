@@ -7,10 +7,12 @@
         public string Name { get; set; } = null!;
 
         public int? AlbumId { get; set; }
+        public string? AlbumTitle { get; set; }
 
         public int Duration { get; set; }
 
         public int? GenreId { get; set; }
+        public string? GenreName { get; set; }
 
         public DateOnly? ReleaseDate { get; set; }
 
@@ -21,6 +23,6 @@
         public string? CoverUrl { get; set; }
 
         public string? Status { get; set; }
-
+        public List<string> Singers { get; set; } = new();
     }
 }

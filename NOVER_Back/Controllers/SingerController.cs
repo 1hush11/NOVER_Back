@@ -143,7 +143,7 @@ namespace NOVER_Back.Controllers
                 PhotoUrl = s.PhotoUrl,
                 Description = s.Description,
                 ViewCount = s.ViewCount,
-                SubscribersCount = s.SubscribersCount
+                SubscribersCount = s.SubscribersCount,
             }).ToList();
 
             return Ok(result);
@@ -158,6 +158,130 @@ namespace NOVER_Back.Controllers
             }
 
             return userId;
+        }
+
+        [HttpGet("singers/{id}/top_tracks")]
+        public async Task<ActionResult<IEnumerable<TrackDTO>>> GetTopTracksBySinger(int id, [FromQuery] int count = 10)
+        {
+            var singer = await _context.Singers
+                .Include(s => s.Tracks)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (singer == null)
+                return NotFound("Исполнитель не найден.");
+
+            var topTracks = singer.Tracks
+                .OrderByDescending(t => t.PlayCount ?? 0)
+                .Take(count)
+                .Select(t => new TrackDTO
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    AlbumId = t.AlbumId,
+                    Duration = t.Duration,
+                    GenreId = t.GenreId,
+                    ReleaseDate = t.ReleaseDate,
+                    PlayCount = t.PlayCount,
+                    AudioUrl = t.AudioUrl,
+                    CoverUrl = t.CoverUrl,
+                    Status = t.Status
+                }).ToList();
+
+            return Ok(topTracks);
+        }
+
+        [HttpGet("singers/{id}/similar")]
+        public async Task<ActionResult<IEnumerable<object>>> GetSimilarSingers(int id)
+        {
+            var singer = await _context.Singers
+                .Include(s => s.Tracks)
+                .ThenInclude(t => t.Genre)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (singer == null)
+                return NotFound("Исполнитель не найден.");
+
+            var genreIds = singer.Tracks
+                .Where(t => t.GenreId != null)
+                .Select(t => t.GenreId!.Value)
+                .Distinct()
+                .ToList();
+
+            var similarSingers = await _context.Singers
+                .Where(s => s.Id != id)
+                .Where(s => s.Tracks.Any(t => genreIds.Contains(t.GenreId ?? -1)))
+                .Include(s => s.Tracks) 
+                .Distinct()
+                .Take(10)
+                .ToListAsync();
+
+            var result = similarSingers.Select(s => new
+            {
+                Id = s.Id,
+                Name = s.Name,
+                PhotoUrl = s.PhotoUrl,
+                Description = s.Description,
+                ViewCount = s.ViewCount,
+                SubscribersCount = s.SubscribersCount,
+                Tracks = s.Tracks.Select(t => new TrackDTO
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    AlbumId = t.AlbumId,
+                    Duration = t.Duration,
+                    GenreId = t.GenreId,
+                    ReleaseDate = t.ReleaseDate,
+                    PlayCount = t.PlayCount,
+                    AudioUrl = t.AudioUrl,
+                    CoverUrl = t.CoverUrl,
+                    Status = t.Status
+                }).ToList()
+            });
+
+            return Ok(result);
+        }
+
+        [HttpGet("singers/{id}/albums")]
+        public async Task<ActionResult<IEnumerable<AlbumWithTrackDTO>>> GetSingerAlbums(int id)
+        {
+            var albums = await _context.Albums
+                .Include(a => a.Tracks)
+                .Include(a => a.Singer)
+                .Where(a => a.SingerId == id)
+                .ToListAsync();
+
+            var result = albums.Select(album => new AlbumWithTrackDTO
+            {
+                Id = album.Id,
+                Name = album.Name,
+                SingerId = album.SingerId,
+                CoverUrl = album.CoverUrl,
+                ReleaseDate = album.ReleaseDate,
+                Singer = album.Singer == null ? null : new SingerDTO
+                {
+                    Id = album.Singer.Id,
+                    Name = album.Singer.Name,
+                    PhotoUrl = album.Singer.PhotoUrl,
+                    Description = album.Singer.Description,
+                    ViewCount = album.Singer.ViewCount,
+                    SubscribersCount = album.Singer.SubscribersCount
+                },
+                Tracks = album.Tracks.Select(t => new TrackDTO
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    AlbumId = t.AlbumId,
+                    Duration = t.Duration,
+                    GenreId = t.GenreId,
+                    ReleaseDate = t.ReleaseDate,
+                    PlayCount = t.PlayCount,
+                    AudioUrl = t.AudioUrl,
+                    CoverUrl = t.CoverUrl,
+                    Status = t.Status
+                }).ToList()
+            }).ToList();
+
+            return Ok(result);
         }
     }
 }

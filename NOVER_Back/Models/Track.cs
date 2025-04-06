@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace NOVER_Back.Models;
 
@@ -24,6 +25,8 @@ public partial class Track
     public string? CoverUrl { get; set; }
 
     public string? Status { get; set; }
+
+    [JsonIgnore]
 
     public virtual Album? Album { get; set; }
 
