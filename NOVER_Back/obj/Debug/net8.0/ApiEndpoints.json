@@ -345,6 +345,27 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.PlaylistController",
+    "Method": "EditPlaylist",
+    "RelativePath": "api/playlist/playlists/{id}/edit",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updatedPlaylist",
+        "Type": "NOVER_Back.Models.DTOs.PlaylistDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.PlaylistController",
     "Method": "RemoveTrackFromPlaylist",
     "RelativePath": "api/playlist/playlists/{id}/remove",
     "HttpMethod": "POST",
@@ -810,6 +831,32 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "AddTrack",
+    "RelativePath": "api/user/add_track",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trackDto",
+        "Type": "NOVER_Back.Models.DTOs.TrackDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NOVER_Back.Models.Track",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "NOVER_Back.Controllers.UserController",

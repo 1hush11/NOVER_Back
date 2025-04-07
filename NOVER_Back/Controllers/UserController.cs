@@ -76,9 +76,9 @@ namespace NOVER_Back.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var exists = await _context.Users.AnyAsync(u => u.Login == user.Login);
+            var exists = await _context.Users.AnyAsync(u => (u.Login == user.Login || u.Username == user.Username) || (u.Login == user.Login && u.Username == user.Username));
             if (exists)
-                return Conflict($"Пользователь с логином {user.Login} уже существует.");
+                return Conflict($"Пользователь с таким именем или логином уже существует.");
 
             var passwordHasher = new PasswordHasher<User>();
             var registrationDate = DateTime.UtcNow.ToLocalTime();
@@ -140,40 +140,115 @@ namespace NOVER_Back.Controllers
             if (userId == null)
                 return Unauthorized("Пользователь не авторизован.");
 
-            var createdPlaylists = await _context.Playlists
-                .Include(p => p.Creator)
-                .Where(p => p.CreatorId == userId)
+            var createdPlaylists = await _context.UserPlaylists
+                .Where(up => up.UserId == userId && up.IsOwner == true)
+                .Include(up => up.Playlist)
+                    .ThenInclude(p => p.Creator)
                 .ToListAsync();
 
-            var userPlaylists = await _context.UserPlaylists
+            var savedPlaylists = await _context.UserPlaylists
                 .Where(up => up.UserId == userId && (up.IsOwner == false || up.IsOwner == null))
                 .Include(up => up.Playlist)
                     .ThenInclude(p => p.Creator)
-                .Select(up => up.Playlist)
                 .ToListAsync();
 
             var result = new
             {
-                Created = createdPlaylists.Select(p => new
+                Created = createdPlaylists.Select(up => new
                 {
-                    p.Id,
-                    p.Title,
-                    p.CoverUrl,
-                    p.Description,
-                    p.CreatedAt,
-                    p.Type,
-                    Creator = p.Creator?.Username ?? "Неизвестно"
+                    up.Playlist.Id,
+                    up.Playlist.Title,
+                    up.Playlist.CoverUrl,
+                    up.Playlist.Description,
+                    up.Playlist.CreatedAt,
+                    up.Playlist.Type,
+                    Creator = up.Playlist.Creator?.Username ?? "Неизвестно",
+                    IsOwner = true
                 }),
-                Saved = userPlaylists.Select(p => new
+                Saved = savedPlaylists.Select(up => new
                 {
-                    p.Id,
-                    p.Title,
-                    p.CoverUrl,
-                    p.Description,
-                    p.CreatedAt,
-                    p.Type,
-                    Creator = p.Creator?.Username ?? "Неизвестно"
+                    up.Playlist.Id,
+                    up.Playlist.Title,
+                    up.Playlist.CoverUrl,
+                    up.Playlist.Description,
+                    up.Playlist.CreatedAt,
+                    up.Playlist.Type,
+                    Creator = up.Playlist.Creator?.Username ?? "Неизвестно",
+                    IsOwner = false
                 })
+            };
+
+            return Ok(result);
+        }
+
+        [HttpPost("add_track")]
+        public async Task<ActionResult<Track>> AddTrack([FromBody] TrackDTO trackDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return Unauthorized("Пользователь не найден.");
+
+            if (trackDto.AlbumId.HasValue && !await _context.Albums.AnyAsync(a => a.Id == trackDto.AlbumId))
+                return BadRequest($"Альбом с ID {trackDto.AlbumId} не найден.");
+
+            if (trackDto.GenreId.HasValue && !await _context.Genres.AnyAsync(g => g.Id == trackDto.GenreId))
+                return BadRequest($"Жанр с ID {trackDto.GenreId} не найден.");
+
+            var singer = await _context.Singers
+                .FirstOrDefaultAsync(s => s.Name.ToLower() == user.Username.ToLower());
+
+            if (singer == null)
+            {
+                singer = new Singer
+                {
+                    Name = user.Username,
+                    PhotoUrl = "",
+                    Description = "Пользовательский исполнитель",
+                    ViewCount = 0,
+                    SubscribersCount = 0
+                };
+
+                _context.Singers.Add(singer);
+                await _context.SaveChangesAsync();
+            }
+
+            var releaseDate = DateOnly.FromDateTime(DateTime.Now.ToLocalTime());
+
+            var newTrack = new Track
+            {
+                Name = trackDto.Name,
+                AlbumId = trackDto.AlbumId,
+                Duration = trackDto.Duration,
+                GenreId = trackDto.GenreId,
+                ReleaseDate = releaseDate,
+                PlayCount = trackDto.PlayCount ?? 0,
+                AudioUrl = trackDto.AudioUrl,
+                CoverUrl = trackDto.CoverUrl,
+                Status = "Активен", 
+                Singers = new List<Singer> { singer }
+            };
+
+            _context.Tracks.Add(newTrack);
+            await _context.SaveChangesAsync();
+
+            var result = new TrackDTO
+            {
+                Id = newTrack.Id,
+                Name = newTrack.Name,
+                AlbumId = newTrack.AlbumId,
+                GenreId = newTrack.GenreId,
+                Duration = newTrack.Duration,
+                AudioUrl = newTrack.AudioUrl,
+                CoverUrl = newTrack.CoverUrl,
+                Status = newTrack.Status,
+                Singers = newTrack.Singers.Select(s => s.Name).ToList()
             };
 
             return Ok(result);

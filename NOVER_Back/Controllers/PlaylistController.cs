@@ -21,14 +21,16 @@ namespace NOVER_Back.Controllers
         {
             var playlist = await _context.Playlists
                 .Include(p => p.Tracks)
-                    .ThenInclude(t => t.Singers)  // Убедитесь, что включены исполнители для трека
+                    .ThenInclude(t => t.Singers)
                 .Include(p => p.Creator)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (playlist == null)
                 return NotFound("Плейлист не найден.");
 
-            // Считаем количество пользователей, добавивших плейлист в медиатеку
+            var currentUserId = GetCurrentUserId();
+            var isOwner = currentUserId != null && playlist.CreatorId == currentUserId;
+
             var savedCount = await _context.UserPlaylists
                 .CountAsync(up => up.PlaylistId == id && (up.IsOwner ?? false) == false);
 
@@ -55,7 +57,8 @@ namespace NOVER_Back.Controllers
                     Status = t.Status,
                     Singers = t.Singers.Select(s => s.Name).ToList()
                 }).ToList(),
-                savedCount
+                savedCount,
+                isOwner
             });
         }
 
@@ -130,6 +133,30 @@ namespace NOVER_Back.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Трек удалён.");
+        }
+
+        [HttpPut("playlists/{id}/edit")]
+        public async Task<IActionResult> EditPlaylist(int id, [FromBody] PlaylistDTO updatedPlaylist)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Не авторизован.");
+
+            var playlist = await _context.Playlists.FindAsync(id);
+            if (playlist == null)
+                return NotFound("Плейлист не найден.");
+
+            if (playlist.CreatorId != userId)
+                return Forbid("Вы не являетесь владельцем этого плейлиста.");
+
+            playlist.Title = updatedPlaylist.Title;
+            playlist.Description = updatedPlaylist.Description;
+            playlist.CoverUrl = updatedPlaylist.CoverUrl;
+            playlist.Type = updatedPlaylist.Type;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Плейлист успешно обновлён.");
         }
 
         [HttpPost("playlists/{id}/add_playlist")]
