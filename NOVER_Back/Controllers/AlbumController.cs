@@ -36,6 +36,7 @@ namespace NOVER_Back.Controllers
             var album = await _context.Albums
                 .Include(a => a.Singer)
                 .Include(a => a.Tracks)
+                .ThenInclude(a => a.Singers)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (album == null)
@@ -129,7 +130,8 @@ namespace NOVER_Back.Controllers
                     PlayCount = t.PlayCount,
                     AudioUrl = t.AudioUrl,
                     CoverUrl = t.CoverUrl,
-                    Status = t.Status
+                    Status = t.Status,
+                    Singers = t.Singers.Select(s => s.Name).ToList()
                 }).ToList()
             };
         }

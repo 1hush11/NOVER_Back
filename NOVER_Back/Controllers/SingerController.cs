@@ -159,12 +159,12 @@ namespace NOVER_Back.Controllers
 
             return userId;
         }
-
         [HttpGet("singers/{id}/top_tracks")]
         public async Task<ActionResult<IEnumerable<TrackDTO>>> GetTopTracksBySinger(int id, [FromQuery] int count = 10)
         {
             var singer = await _context.Singers
                 .Include(s => s.Tracks)
+                    .ThenInclude(t => t.Singers)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             if (singer == null)
@@ -184,11 +184,13 @@ namespace NOVER_Back.Controllers
                     PlayCount = t.PlayCount,
                     AudioUrl = t.AudioUrl,
                     CoverUrl = t.CoverUrl,
-                    Status = t.Status
+                    Status = t.Status,
+                    Singers = t.Singers.Select(s => s.Name).ToList()
                 }).ToList();
 
             return Ok(topTracks);
         }
+
 
         [HttpGet("singers/{id}/similar")]
         public async Task<ActionResult<IEnumerable<object>>> GetSimilarSingers(int id)
@@ -234,7 +236,8 @@ namespace NOVER_Back.Controllers
                     PlayCount = t.PlayCount,
                     AudioUrl = t.AudioUrl,
                     CoverUrl = t.CoverUrl,
-                    Status = t.Status
+                    Status = t.Status,
+                    Singers = t.Singers.Select(s => s.Name).ToList()
                 }).ToList()
             });
 

@@ -386,6 +386,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "NOVER_Back.Controllers.PlaylistController",
+    "Method": "GetRecommendedPlaylists",
+    "RelativePath": "api/playlist/playlists/recommended",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.SearchController",
+    "Method": "Search",
+    "RelativePath": "api/search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "q",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "NOVER_Back.Controllers.SingerController",
     "Method": "GetSingers",
     "RelativePath": "api/singer/singers",
@@ -640,7 +666,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "NOVER_Back.Models.Track",
+        "Type": "NOVER_Back.Models.DTOs.TrackDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -860,8 +886,82 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "AddAlbumToLibrary",
+    "RelativePath": "api/user/library/add_album/{albumId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "albumId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "SavePlaylistToLibrary",
+    "RelativePath": "api/user/library/add_playlist/{playlistId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "playlistId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "AddTrackToLibrary",
+    "RelativePath": "api/user/library/add_track/{trackId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trackId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
     "Method": "GetUserPlaylists",
     "RelativePath": "api/user/library/playlists",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "RemoveSavedPlaylist",
+    "RelativePath": "api/user/library/remove_playlist/{playlistId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "playlistId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "GetSavedPlaylists",
+    "RelativePath": "api/user/library/saved_playlists",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -943,6 +1043,16 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "GetPublicPlaylistsFromOthers",
+    "RelativePath": "api/user/playlists/others",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "NOVER_Back.Controllers.UserController",

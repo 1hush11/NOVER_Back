@@ -169,7 +169,7 @@ namespace NOVER_Back.Controllers
         }
 
         [HttpGet("current")]
-        public async Task<ActionResult<Track>> GetCurrentTrack()
+        public async Task<ActionResult<TrackDTO>> GetCurrentTrack()
         {
             if (!Request.Cookies.TryGetValue("currentTrackId", out var trackIdStr) ||
                 !int.TryParse(trackIdStr, out var trackId))
@@ -178,14 +178,29 @@ namespace NOVER_Back.Controllers
             }
 
             var track = await _context.Tracks
+                .Include(t => t.Singers)
                 .Include(t => t.Album)
                 .Include(t => t.Genre)
                 .FirstOrDefaultAsync(t => t.Id == trackId);
 
-            return track == null
-                ? NotFound("Текущий трек не найден.")
-                : Ok(track);
+            if (track == null)
+                return NotFound("Трек не найден.");
+
+            var dto = new TrackDTO
+            {
+                Id = track.Id,
+                Name = track.Name,
+                GenreName = track.Genre?.Name,
+                AlbumTitle = track.Album?.Name,
+                Singers = track.Singers.Select(s => s.Name).ToList(),
+                CoverUrl = track.CoverUrl,
+                AudioUrl = track.AudioUrl,
+                Duration = track.Duration
+            };
+
+            return Ok(dto);
         }
+
 
         [HttpPost("{id}/play")]
         public async Task<IActionResult> IncrementPlayCount(int id)

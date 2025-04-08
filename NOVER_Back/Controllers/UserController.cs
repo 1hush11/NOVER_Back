@@ -133,6 +133,33 @@ namespace NOVER_Back.Controllers
 
             return Ok(trackDTOs);
         }
+        [HttpPost("library/add_track/{trackId}")]
+        public async Task<IActionResult> AddTrackToLibrary(int trackId)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var user = await _context.Users
+                .Include(u => u.Tracks)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return NotFound("Пользователь не найден.");
+
+            var track = await _context.Tracks.FindAsync(trackId);
+            if (track == null)
+                return NotFound("Трек не найден.");
+
+            if (user.Tracks.Any(t => t.Id == trackId))
+                return BadRequest("Трек уже есть в медиатеке пользователя.");
+
+            user.Tracks.Add(track);
+            await _context.SaveChangesAsync();
+
+            return Ok("Трек добавлен в медиатеку.");
+        }
+
         [HttpGet("library/playlists")]
         public async Task<ActionResult<object>> GetUserPlaylists()
         {
@@ -179,6 +206,140 @@ namespace NOVER_Back.Controllers
             };
 
             return Ok(result);
+        }
+        [HttpPost("library/add_album/{albumId}")]
+        public async Task<IActionResult> AddAlbumToLibrary(int albumId)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var user = await _context.Users
+                .Include(u => u.Tracks)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return NotFound("Пользователь не найден.");
+
+            var album = await _context.Albums
+                .Include(a => a.Tracks)
+                .FirstOrDefaultAsync(a => a.Id == albumId);
+
+            if (album == null)
+                return NotFound("Альбом не найден.");
+
+            var addedCount = 0;
+            foreach (var track in album.Tracks)
+            {
+                if (!user.Tracks.Any(t => t.Id == track.Id))
+                {
+                    user.Tracks.Add(track);
+                    addedCount++;
+                }
+            }
+
+            if (addedCount == 0)
+                return BadRequest("Все треки этого альбома уже добавлены в медиатеку.");
+
+            await _context.SaveChangesAsync();
+            return Ok($"Добавлено треков: {addedCount}");
+        }
+
+        [HttpGet("playlists/others")]
+        public async Task<IActionResult> GetPublicPlaylistsFromOthers()
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var playlists = await _context.Playlists
+                .Where(p => p.CreatorId != userId && p.Type == "public")
+                .Include(p => p.Creator)
+                .Select(p => new {
+                    p.Id,
+                    p.Title,
+                    p.CoverUrl,
+                    p.Description,
+                    p.CreatedAt,
+                    p.Type,
+                    Creator = p.Creator!.Username
+                })
+                .ToListAsync();
+
+            return Ok(playlists);
+        }
+
+        [HttpGet("library/saved_playlists")]
+        public async Task<IActionResult> GetSavedPlaylists()
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var savedPlaylists = await _context.UserPlaylists
+                .Where(up => up.UserId == userId)
+                .Include(up => up.Playlist)
+                    .ThenInclude(p => p.Creator)
+                .Select(up => new {
+                    up.Playlist.Id,
+                    up.Playlist.Title,
+                    up.Playlist.CoverUrl,
+                    up.Playlist.Description,
+                    up.Playlist.CreatedAt,
+                    up.Playlist.Type,
+                    Creator = up.Playlist.Creator!.Username
+                })
+                .ToListAsync();
+
+            return Ok(savedPlaylists);
+        }
+
+        [HttpPost("library/add_playlist/{playlistId}")]
+        public async Task<IActionResult> SavePlaylistToLibrary(int playlistId)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var playlist = await _context.Playlists.FindAsync(playlistId);
+            if (playlist == null)
+                return NotFound("Плейлист не найден.");
+
+            var alreadySaved = await _context.UserPlaylists.AnyAsync(up =>
+                up.UserId == userId && up.PlaylistId == playlistId && (up.IsOwner == false || up.IsOwner == null));
+            if (alreadySaved)
+                return BadRequest("Плейлист уже сохранён в медиатеке.");
+
+            var userPlaylist = new UserPlaylist
+            {
+                UserId = userId.Value,
+                PlaylistId = playlistId,
+                IsOwner = false
+            };
+
+            _context.UserPlaylists.Add(userPlaylist);
+            await _context.SaveChangesAsync();
+
+            return Ok("Плейлист успешно добавлен в медиатеку.");
+        }
+
+        [HttpDelete("library/remove_playlist/{playlistId}")]
+        public async Task<IActionResult> RemoveSavedPlaylist(int playlistId)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized();
+
+            var link = await _context.UserPlaylists
+                .FirstOrDefaultAsync(up => up.UserId == userId && up.PlaylistId == playlistId && up.IsOwner == false);
+
+            if (link == null)
+                return NotFound("Плейлист не найден в медиатеке.");
+
+            _context.UserPlaylists.Remove(link);
+            await _context.SaveChangesAsync();
+
+            return Ok("Плейлист удалён из медиатеки.");
         }
 
         [HttpPost("add_track")]

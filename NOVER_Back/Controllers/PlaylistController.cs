@@ -62,6 +62,23 @@ namespace NOVER_Back.Controllers
             });
         }
 
+        [HttpGet("playlists/recommended")]
+        public async Task<IActionResult> GetRecommendedPlaylists()
+        {
+            var playlists = await _context.Playlists
+                .Where(p => p.Creator != null && p.Creator.Role == "Администратор" && p.Type == "public")
+                .Select(p => new {
+                    p.Id,
+                    p.Title,
+                    p.CoverUrl,
+                    p.Description,
+                    Creator = p.Creator!.Username
+                })
+                .ToListAsync();
+
+            return Ok(playlists);
+        }
+
         [HttpPost("add_playlist")]
         public async Task<ActionResult> CreatePlaylist([FromBody] PlaylistDTO playlist)
         {
