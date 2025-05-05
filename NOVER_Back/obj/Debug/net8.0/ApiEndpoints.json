@@ -960,6 +960,22 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "RemoveTrackFromLibrary",
+    "RelativePath": "api/user/library/remove_track/{trackId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trackId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
     "Method": "GetSavedPlaylists",
     "RelativePath": "api/user/library/saved_playlists",
     "HttpMethod": "GET",

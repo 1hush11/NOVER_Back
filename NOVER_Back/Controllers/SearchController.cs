@@ -38,7 +38,7 @@ namespace NOVER_Back.Controllers
                     Album = t.Album,
                     AudioUrl = t.AudioUrl,
                     CoverUrl = t.CoverUrl,
-                    Singer = string.Join(", ", t.Singers.Select(s => s.Name)),
+                    Singers = t.Singers.Select(s => s.Name).ToList(),
                     Type = "track"
                 }).ToListAsync();
 

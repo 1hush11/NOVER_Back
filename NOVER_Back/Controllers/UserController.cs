@@ -160,6 +160,31 @@ namespace NOVER_Back.Controllers
             return Ok("Трек добавлен в медиатеку.");
         }
 
+        [HttpDelete("library/remove_track/{trackId}")]
+        public async Task<IActionResult> RemoveTrackFromLibrary(int trackId)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var user = await _context.Users
+                .Include(u => u.Tracks)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return NotFound("Пользователь не найден.");
+
+            var track = user.Tracks.FirstOrDefault(t => t.Id == trackId);
+            if (track == null)
+                return NotFound("Трек не найден в медиатеке пользователя.");
+
+            user.Tracks.Remove(track);
+            await _context.SaveChangesAsync();
+
+            return Ok("Трек удалён из медиатеки.");
+        }
+
+
         [HttpGet("library/playlists")]
         public async Task<ActionResult<object>> GetUserPlaylists()
         {
