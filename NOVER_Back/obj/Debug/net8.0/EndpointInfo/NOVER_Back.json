@@ -482,6 +482,27 @@
             "description": "OK"
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "Playlist"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/api/playlist/playlists/recommended": {
@@ -661,29 +682,6 @@
     },
     "/api/playlist/playlists/{id}/add_playlist": {
       "post": {
-        "tags": [
-          "Playlist"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/playlist/playlist/{id}/remove_playlist": {
-      "delete": {
         "tags": [
           "Playlist"
         ],

@@ -2,6 +2,7 @@
 using NOVER_Back.Models.DTOs;
 using NOVER_Back.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace NOVER_Back.Controllers
 {
@@ -92,7 +93,7 @@ namespace NOVER_Back.Controllers
                 CoverUrl = playlist.CoverUrl,
                 Description = playlist.Description,
                 Type = playlist.Type,
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 CreatorId = userId
             };
 
@@ -101,15 +102,16 @@ namespace NOVER_Back.Controllers
 
             _context.UserPlaylists.Add(new UserPlaylist
             {
-                PlaylistId = playlist.Id,
+                PlaylistId = newPlaylist.Id,
                 UserId = userId.Value,
                 IsOwner = true
             });
 
             await _context.SaveChangesAsync();
 
-            return Ok(new { playlist.Id });
+            return Ok(new { newPlaylist.Id });
         }
+
 
         [HttpPost("playlists/{id}/add")]
         public async Task<IActionResult> AddTrackToPlaylist(int id, [FromBody] int trackId)
@@ -200,24 +202,34 @@ namespace NOVER_Back.Controllers
             return Ok("Плейлист добавлен в медиатеку.");
         }
 
-        [HttpDelete("playlist/{id}/remove_playlist")]
-        public async Task<IActionResult> UnsavePlaylist(int id)
+        [HttpDelete("playlists/{id}")]
+        public async Task<IActionResult> DeletePlaylist(int id)
         {
             var userId = GetCurrentUserId();
             if (userId == null)
-                return Unauthorized();
+                return Unauthorized("Не авторизован.");
 
-            var userPlaylist = await _context.UserPlaylists
-                .FirstOrDefaultAsync(up => up.UserId == userId && up.PlaylistId == id && (up.IsOwner == false || up.IsOwner == null));
+            var playlist = await _context.Playlists
+                .Include(p => p.Tracks)
+                .Include(p => p.UserPlaylists)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
-            if (userPlaylist == null)
-                return NotFound("Плейлист не найден в медиатеке.");
+            if (playlist == null)
+                return NotFound("Плейлист не найден.");
 
-            _context.UserPlaylists.Remove(userPlaylist);
+            if (playlist.CreatorId != userId)
+                return Forbid("Вы не являетесь владельцем этого плейлиста.");
+
+            // Удаляем связи из таблицы UserPlaylists
+            _context.UserPlaylists.RemoveRange(playlist.UserPlaylists);
+
+            // Удаляем сам плейлист (Entity Framework удалит связи с треками благодаря навигационным коллекциям)
+            _context.Playlists.Remove(playlist);
             await _context.SaveChangesAsync();
 
-            return Ok("Плейлист удалён из медиатеки.");
+            return Ok("Плейлист полностью удалён.");
         }
+
 
         private int? GetCurrentUserId()
         {

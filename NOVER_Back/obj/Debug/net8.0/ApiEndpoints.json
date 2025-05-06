@@ -276,9 +276,9 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.PlaylistController",
-    "Method": "UnsavePlaylist",
-    "RelativePath": "api/playlist/playlist/{id}/remove_playlist",
-    "HttpMethod": "DELETE",
+    "Method": "GetPlaylistById",
+    "RelativePath": "api/playlist/playlists/{id}",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -292,9 +292,9 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.PlaylistController",
-    "Method": "GetPlaylistById",
+    "Method": "DeletePlaylist",
     "RelativePath": "api/playlist/playlists/{id}",
-    "HttpMethod": "GET",
+    "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
