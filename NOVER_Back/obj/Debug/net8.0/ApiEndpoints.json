@@ -934,12 +934,38 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "GetUserLibraryAlbums",
+    "RelativePath": "api/user/library/albums",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
     "Method": "GetUserPlaylists",
     "RelativePath": "api/user/library/playlists",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "RemoveAlbumFromLibrary",
+    "RelativePath": "api/user/library/remove_album/{albumId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "albumId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -1080,6 +1106,62 @@
     "Parameters": [
       {
         "Name": "user",
+        "Type": "NOVER_Back.Models.DTOs.UserDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NOVER_Back.Models.User",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "GetSubscribedAlbums",
+    "RelativePath": "api/user/subscribed_albums",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "GetSubscribedTracks",
+    "RelativePath": "api/user/subscribed_tracks",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "GetMySubscriptions",
+    "RelativePath": "api/user/subscriptions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/user/update",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userToUpdate",
         "Type": "NOVER_Back.Models.DTOs.UserDTO",
         "IsRequired": true
       }

@@ -42,6 +42,37 @@ namespace NOVER_Back.Controllers
             return Ok(user);
         }
 
+        [HttpPut("update")]
+        public async Task<ActionResult<User>> UpdateProfile([FromBody] UserDTO userToUpdate)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return NotFound("Пользователь не найден.");
+
+            if (!string.IsNullOrEmpty(userToUpdate.Login) && user.Login != userToUpdate.Login)
+            {
+                var loginExists = await _context.Users.AnyAsync(u => u.Login == userToUpdate.Login);
+                if (loginExists)
+                    return Conflict("Пользователь с таким логином уже существует.");
+                user.Login = userToUpdate.Login;
+            }
+
+            if (!string.IsNullOrEmpty(userToUpdate.Username))
+                user.Username = userToUpdate.Username;
+
+            if (!string.IsNullOrEmpty(userToUpdate.Avatar))
+                user.Avatar = userToUpdate.Avatar;
+
+            var hasher = new PasswordHasher<User>();
+            user.PasswordHash = hasher.HashPassword(user, userToUpdate.PasswordHash);
+
+            await _context.SaveChangesAsync();
+            return Ok(user);
+        }
 
         [HttpGet("me")]
         public async Task<ActionResult<User>> GetCurrentUser()
@@ -232,6 +263,41 @@ namespace NOVER_Back.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("library/albums")]
+        public async Task<IActionResult> GetUserLibraryAlbums()
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var user = await _context.Users
+                .Include(u => u.Tracks)
+                    .ThenInclude(t => t.Album)
+                .Include(u => u.Tracks)
+                    .ThenInclude(t => t.Singers)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return NotFound("Пользователь не найден.");
+
+            var albumGroups = user.Tracks
+                .Where(t => t.Album != null)
+                .GroupBy(t => t.Album)
+                .Select(g => new
+                {
+                    Id = g.Key!.Id,
+                    Name = g.Key!.Name,
+                    CoverUrl = g.Key.CoverUrl,
+                    ReleaseDate = g.Key.ReleaseDate,
+                    Singer = g.First().Singers.FirstOrDefault()?.Name ?? "Неизвестно",
+                    TrackCount = g.Count()
+                })
+                .ToList();
+
+            return Ok(albumGroups);
+        }
+
         [HttpPost("library/add_album/{albumId}")]
         public async Task<IActionResult> AddAlbumToLibrary(int albumId)
         {
@@ -269,6 +335,46 @@ namespace NOVER_Back.Controllers
             await _context.SaveChangesAsync();
             return Ok($"Добавлено треков: {addedCount}");
         }
+
+        [HttpDelete("library/remove_album/{albumId}")]
+        public async Task<IActionResult> RemoveAlbumFromLibrary(int albumId)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var user = await _context.Users
+                .Include(u => u.Tracks)
+                .ThenInclude(t => t.Album)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return NotFound("Пользователь не найден.");
+
+            var album = await _context.Albums
+                .Include(a => a.Tracks)
+                .FirstOrDefaultAsync(a => a.Id == albumId);
+
+            if (album == null)
+                return NotFound("Альбом не найден.");
+
+            var tracksToRemove = album.Tracks
+                .Where(t => user.Tracks.Any(ut => ut.Id == t.Id))
+                .ToList();
+
+            if (tracksToRemove.Count == 0)
+                return BadRequest("Треки этого альбома отсутствуют в медиатеке пользователя.");
+
+            foreach (var track in tracksToRemove)
+            {
+                user.Tracks.Remove(track);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok($"Удалено треков из медиатеки: {tracksToRemove.Count}");
+        }
+
 
         [HttpGet("playlists/others")]
         public async Task<IActionResult> GetPublicPlaylistsFromOthers()
@@ -438,6 +544,136 @@ namespace NOVER_Back.Controllers
             };
 
             return Ok(result);
+        }
+
+        [HttpGet("subscriptions")]
+        public async Task<IActionResult> GetMySubscriptions()
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var user = await _context.Users
+                .Include(u => u.Singers)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return NotFound("Пользователь не найден.");
+
+            var result = user.Singers.Select(s => new SingerDTO
+            {
+                Id = s.Id,
+                Name = s.Name,
+                PhotoUrl = s.PhotoUrl,
+                Description = s.Description,
+                ViewCount = s.ViewCount,
+                SubscribersCount = s.SubscribersCount
+            }).ToList();
+
+            if (!result.Any())
+                return NotFound("Пользователь ни на кого не подписан.");
+
+            return Ok(result);
+        }
+
+        [HttpGet("subscribed_albums")]
+        public async Task<IActionResult> GetSubscribedAlbums()
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var user = await _context.Users
+                .Include(u => u.Singers)
+                .ThenInclude(s => s.Albums)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return NotFound("Пользователь не найден.");
+            
+            var cutoffDate = DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(-6));
+
+            var albums = user.Singers
+                .SelectMany(s => s.Albums)
+                .Where(a => a.ReleaseDate != null && a.ReleaseDate >= cutoffDate)
+                .OrderByDescending(a => a.ReleaseDate)
+                .Take(15)
+                .Select(album => new
+                {
+                    Id = album.Id,
+                    Name = album.Name,
+                    SingerId = album.SingerId,
+                    CoverUrl = album.CoverUrl,
+                    ReleaseDate = album.ReleaseDate,
+                    Singer = album.Singer == null ? null : new SingerDTO
+                    {
+                        Id = album.Singer.Id,
+                        Name = album.Singer.Name,
+                        PhotoUrl = album.Singer.PhotoUrl,
+                        Description = album.Singer.Description,
+                        ViewCount = album.Singer.ViewCount,
+                        SubscribersCount = album.Singer.SubscribersCount
+                    },
+                    Tracks = album.Tracks.Select(t => new TrackDTO
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        AlbumId = t.AlbumId,
+                        Duration = t.Duration,
+                        GenreId = t.GenreId,
+                        ReleaseDate = t.ReleaseDate,
+                        PlayCount = t.PlayCount,
+                        AudioUrl = t.AudioUrl,
+                        CoverUrl = t.CoverUrl,
+                        Status = t.Status
+                    })
+                })
+                .ToList();
+
+            return Ok(albums);
+        }
+
+        [HttpGet("subscribed_tracks")]
+        public async Task<IActionResult> GetSubscribedTracks()
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var user = await _context.Users
+                .Include(u => u.Singers)
+                .ThenInclude(s => s.Tracks)
+                .ThenInclude(t => t.Singers)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return NotFound("Пользователь не найден.");
+
+            var cutoffDate = DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(-6));
+
+            var tracks = user.Singers
+                .SelectMany(s => s.Tracks)
+                .Where(t => t.ReleaseDate != null && t.ReleaseDate >= cutoffDate)
+                .OrderByDescending(t => t.PlayCount ?? 0)
+                .Distinct()
+                .Take(50)
+                .Select(t => new
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    AlbumId = t.AlbumId,
+                    Duration = t.Duration,
+                    GenreId = t.GenreId,
+                    ReleaseDate = t.ReleaseDate,
+                    PlayCount = t.PlayCount,
+                    AudioUrl = t.AudioUrl,
+                    CoverUrl = t.CoverUrl,
+                    Status = t.Status,
+                    Singers = t.Singers.Select(s => s.Name).ToList()
+                })
+                .ToList();
+
+            return Ok(tracks);
         }
 
         private int? GetCurrentUserId()

@@ -62,7 +62,7 @@ namespace NOVER_Back.Controllers
                 .Select(a => new
                 {
                     Id = a.Id,
-                    Title = a.Name,
+                    Name = a.Name,
                     CoverUrl = a.CoverUrl,
                     ReleaseDate = a.ReleaseDate,
                     Singer = a.Singer,

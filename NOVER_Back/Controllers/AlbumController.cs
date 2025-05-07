@@ -135,6 +135,5 @@ namespace NOVER_Back.Controllers
                 }).ToList()
             };
         }
-
     }
 }
