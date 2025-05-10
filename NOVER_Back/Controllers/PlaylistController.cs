@@ -10,9 +10,9 @@ namespace NOVER_Back.Controllers
     [ApiController]
     public class PlaylistController : ControllerBase
     {
-        private readonly NoverDbContext _context;
+        private readonly DbNoverContext _context;
 
-        public PlaylistController(NoverDbContext context)
+        public PlaylistController(DbNoverContext context)
         {
             _context = context;
         }
@@ -220,10 +220,8 @@ namespace NOVER_Back.Controllers
             if (playlist.CreatorId != userId)
                 return Forbid("Вы не являетесь владельцем этого плейлиста.");
 
-            // Удаляем связи из таблицы UserPlaylists
             _context.UserPlaylists.RemoveRange(playlist.UserPlaylists);
 
-            // Удаляем сам плейлист (Entity Framework удалит связи с треками благодаря навигационным коллекциям)
             _context.Playlists.Remove(playlist);
             await _context.SaveChangesAsync();
 

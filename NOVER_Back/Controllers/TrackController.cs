@@ -9,9 +9,9 @@ namespace NOVER_Back.Controllers
     [ApiController]
     public class TrackController : ControllerBase
     {
-        private readonly NoverDbContext _context;
+        private readonly DbNoverContext _context;
 
-        public TrackController(NoverDbContext context)
+        public TrackController(DbNoverContext context)
         {
             _context = context;
         }

@@ -1995,6 +1995,44 @@
   },
   "components": {
     "schemas": {
+      "Album": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "singerId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "coverUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "releaseDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "singer": {
+            "$ref": "#/components/schemas/Singer"
+          },
+          "tracks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Track"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "AlbumWithTrackDTO": {
         "type": "object",
         "properties": {
@@ -2078,6 +2116,11 @@
             "format": "int32",
             "nullable": true
           },
+          "trackId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "content": {
             "type": "string",
             "nullable": true
@@ -2085,11 +2128,6 @@
           "createdAt": {
             "type": "string",
             "format": "date-time",
-            "nullable": true
-          },
-          "trackId": {
-            "type": "integer",
-            "format": "int32",
             "nullable": true
           },
           "track": {
@@ -2270,12 +2308,12 @@
             "type": "string",
             "nullable": true
           },
-          "viewCount": {
+          "subscribersCount": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "subscribersCount": {
+          "viewCount": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -2375,6 +2413,9 @@
           "status": {
             "type": "string",
             "nullable": true
+          },
+          "album": {
+            "$ref": "#/components/schemas/Album"
           },
           "comments": {
             "type": "array",

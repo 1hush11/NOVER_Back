@@ -14,9 +14,9 @@ public partial class Singer
 
     public string? Description { get; set; }
 
-    public int? ViewCount { get; set; }
-
     public int? SubscribersCount { get; set; }
+
+    public int? ViewCount { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<Album> Albums { get; set; } = new List<Album>();

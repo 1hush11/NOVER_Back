@@ -8,9 +8,9 @@ namespace NOVER_Back.Controllers
     [Route("api/search")]
     public class SearchController : ControllerBase
     {
-        private readonly NoverDbContext _context;
+        private readonly DbNoverContext _context;
 
-        public SearchController(NoverDbContext context)
+        public SearchController(DbNoverContext context)
         {
             _context = context;
         }
@@ -49,7 +49,7 @@ namespace NOVER_Back.Controllers
                 {
                     Id = s.Id,
                     Name = s.Name,
-                    CoverUrl = s.PhotoUrl,
+                    PhotoUrl = s.PhotoUrl,
                     SubscribersCount = s.SubscribersCount,
                     TotalTracks = s.Tracks.Count,
                     TotalPlayCount = s.Tracks.Sum(t => t.PlayCount),

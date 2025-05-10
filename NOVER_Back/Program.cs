@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using NOVER_Back.Controllers;
 using NOVER_Back.Models;
 
@@ -21,7 +22,7 @@ builder.Services.AddCors(options =>
 });
 
 
-builder.Services.AddDbContext<NoverDbContext>(options =>
+builder.Services.AddDbContext<DbNoverContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
@@ -30,6 +31,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "Resources")),
+    RequestPath = "/Resources"
+});
 
 app.UseCors(MyAllowSpecificOrigins);
 

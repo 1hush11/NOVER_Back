@@ -9,9 +9,9 @@ namespace NOVER_Back.Controllers
     [ApiController]
     public class SingerController : ControllerBase
     {
-        private readonly NoverDbContext _context;
+        private readonly DbNoverContext _context;
 
-        public SingerController(NoverDbContext context)
+        public SingerController(DbNoverContext context)
         {
             _context = context;
         }

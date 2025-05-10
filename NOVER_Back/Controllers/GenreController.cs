@@ -9,9 +9,9 @@ namespace NOVER_Back.Controllers
     [ApiController]
     public class GenreController : ControllerBase
     {
-        private readonly NoverDbContext _context;
+        private readonly DbNoverContext _context;
 
-        public GenreController(NoverDbContext context)
+        public GenreController(DbNoverContext context)
         {
             _context = context;
         }

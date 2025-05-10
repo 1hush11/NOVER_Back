@@ -10,9 +10,9 @@ namespace NOVER_Back.Controllers
     [ApiController]
     public class AlbumController : ControllerBase
     {
-        private readonly NoverDbContext _context;
+        private readonly DbNoverContext _context;
 
-        public AlbumController(NoverDbContext context)
+        public AlbumController(DbNoverContext context)
         {
             _context = context;
         }

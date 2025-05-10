@@ -10,9 +10,9 @@ namespace NOVER_Back.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly NoverDbContext _context;
+        private readonly DbNoverContext _context;
 
-        public UserController(NoverDbContext context)
+        public UserController(DbNoverContext context)
         {
             _context = context;
         }
@@ -284,14 +284,14 @@ namespace NOVER_Back.Controllers
             var albumGroups = user.Tracks
                 .Where(t => t.Album != null)
                 .GroupBy(t => t.Album)
-                .Select(g => new
+                .Select(a => new
                 {
-                    Id = g.Key!.Id,
-                    Name = g.Key!.Name,
-                    CoverUrl = g.Key.CoverUrl,
-                    ReleaseDate = g.Key.ReleaseDate,
-                    Singer = g.First().Singers.FirstOrDefault()?.Name ?? "Неизвестно",
-                    TrackCount = g.Count()
+                    Id = a.Key!.Id,
+                    Name = a.Key!.Name,
+                    CoverUrl = a.Key.CoverUrl,
+                    ReleaseDate = a.Key.ReleaseDate,
+                    Singer = a.First().Singers.FirstOrDefault()?.Name ?? "Неизвестно",
+                    TrackCount = a.Count()
                 })
                 .ToList();
 
@@ -501,7 +501,7 @@ namespace NOVER_Back.Controllers
                 singer = new Singer
                 {
                     Name = user.Username,
-                    PhotoUrl = "",
+                    PhotoUrl = user.Avatar,
                     Description = "Пользовательский исполнитель",
                     ViewCount = 0,
                     SubscribersCount = 0
