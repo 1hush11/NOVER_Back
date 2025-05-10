@@ -1,12 +1,20 @@
 {
   "Version": 1,
-  "Hash": "6JrVzYPMvYwrRgnlbIxCqbgV5bTokIiEADs8vUnGs0o=",
+  "Hash": "BYEbdkXk8ogFT/2sf6TQcfhOHpXEKFUP4HVQVRdOpi0=",
   "Source": "NOVER_Back",
   "BasePath": "_content/NOVER_Back",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "NOVER_Back\\wwwroot",
+      "Source": "NOVER_Back",
+      "ContentRoot": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\wwwroot\\",
+      "BasePath": "_content/NOVER_Back",
+      "Pattern": "**"
+    }
+  ],
   "Assets": [],
   "Endpoints": []
 }

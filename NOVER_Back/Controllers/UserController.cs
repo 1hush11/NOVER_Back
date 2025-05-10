@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NOVER_Back.Models;
 using NOVER_Back.Models.DTOs;
+using TagLib;
+
 
 namespace NOVER_Back.Controllers
 {
@@ -473,11 +475,13 @@ namespace NOVER_Back.Controllers
             return Ok("Плейлист удалён из медиатеки.");
         }
 
-        [HttpPost("add_track")]
-        public async Task<ActionResult<Track>> AddTrack([FromBody] TrackDTO trackDto)
+        [HttpPost("publish_track")]
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(typeof(TrackDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> PublishTrack([FromForm] PublishTrackRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (request.File == null || request.File.Length == 0)
+                return BadRequest("Аудиофайл не загружен.");
 
             var userId = GetCurrentUserId();
             if (userId == null)
@@ -487,11 +491,25 @@ namespace NOVER_Back.Controllers
             if (user == null)
                 return Unauthorized("Пользователь не найден.");
 
-            if (trackDto.AlbumId.HasValue && !await _context.Albums.AnyAsync(a => a.Id == trackDto.AlbumId))
-                return BadRequest($"Альбом с ID {trackDto.AlbumId} не найден.");
+            if (request.AlbumId.HasValue && !await _context.Albums.AnyAsync(a => a.Id == request.AlbumId))
+                return BadRequest($"Альбом с ID {request.AlbumId} не найден.");
 
-            if (trackDto.GenreId.HasValue && !await _context.Genres.AnyAsync(g => g.Id == trackDto.GenreId))
-                return BadRequest($"Жанр с ID {trackDto.GenreId} не найден.");
+            if (request.GenreId.HasValue && !await _context.Genres.AnyAsync(g => g.Id == request.GenreId))
+                return BadRequest($"Жанр с ID {request.GenreId} не найден.");
+
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "trackAudios");
+            Directory.CreateDirectory(uploadsFolder);
+
+            var originalName = Path.GetFileNameWithoutExtension(request.File.FileName);
+            var ext = Path.GetExtension(request.File.FileName);
+            var safeName = $"{originalName}{ext}";
+
+            var filePath = Path.Combine(uploadsFolder, safeName);
+
+            using (var saveStream = new FileStream(filePath, FileMode.Create))
+            {
+                await request.File.CopyToAsync(saveStream);
+            }
 
             var singer = await _context.Singers
                 .FirstOrDefaultAsync(s => s.Name.ToLower() == user.Username.ToLower());
@@ -513,17 +531,23 @@ namespace NOVER_Back.Controllers
 
             var releaseDate = DateOnly.FromDateTime(DateTime.Now.ToLocalTime());
 
+            using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            var abstraction = new StreamFileAbstraction(filePath, stream, stream);
+            var tfile = TagLib.File.Create(abstraction);
+
+            var durationInSeconds = (int)tfile.Properties.Duration.TotalSeconds;
+
+
             var newTrack = new Track
             {
-                Name = trackDto.Name,
-                AlbumId = trackDto.AlbumId,
-                Duration = trackDto.Duration,
-                GenreId = trackDto.GenreId,
+                Name = request.Name,
+                AlbumId = request.AlbumId,
+                Duration = durationInSeconds,
+                GenreId = request.GenreId,
                 ReleaseDate = releaseDate,
-                PlayCount = trackDto.PlayCount ?? 0,
-                AudioUrl = trackDto.AudioUrl,
-                CoverUrl = trackDto.CoverUrl,
-                Status = "Активен", 
+                AudioUrl = safeName,
+                CoverUrl = request.CoverUrl,
+                Status = "Активен",
                 Singers = new List<Singer> { singer }
             };
 
@@ -532,7 +556,6 @@ namespace NOVER_Back.Controllers
 
             var result = new TrackDTO
             {
-                Id = newTrack.Id,
                 Name = newTrack.Name,
                 AlbumId = newTrack.AlbumId,
                 GenreId = newTrack.GenreId,
@@ -544,6 +567,97 @@ namespace NOVER_Back.Controllers
             };
 
             return Ok(result);
+        }
+
+        [HttpPost("publish_album")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> PublishAlbum([FromForm] PublishAlbumRequest request)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return Unauthorized("Пользователь не найден.");
+
+            var singer = await _context.Singers
+                .FirstOrDefaultAsync(s => s.Name.ToLower() == user.Username.ToLower());
+
+            if (singer == null)
+            {
+                singer = new Singer
+                {
+                    Name = user.Username,
+                    PhotoUrl = user.Avatar,
+                    Description = "Пользовательский исполнитель",
+                    ViewCount = 0,
+                    SubscribersCount = 0
+                };
+                _context.Singers.Add(singer);
+                await _context.SaveChangesAsync();
+            }
+
+            if (string.IsNullOrWhiteSpace(request.AlbumName) || string.IsNullOrWhiteSpace(request.TracksMeta))
+                return BadRequest("Название альбома или информация о треках не указана.");
+
+            var releaseDate = DateOnly.FromDateTime(DateTime.Now.ToLocalTime());
+
+            var album = new Album
+            {
+                Name = request.AlbumName,
+                SingerId = singer.Id,
+                CoverUrl = request.CoverUrl,
+                ReleaseDate = releaseDate
+            };
+
+            _context.Albums.Add(album);
+            await _context.SaveChangesAsync();
+
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "trackAudios");
+            Directory.CreateDirectory(uploadsFolder);
+
+            var trackMetaList = System.Text.Json.JsonSerializer.Deserialize<List<TrackMeta>>(request.TracksMeta);
+
+            foreach (var trackMeta in trackMetaList!)
+            {
+                var file = Request.Form.Files.FirstOrDefault(f => f.Name == trackMeta.FileKey);
+                if (file == null)
+                    continue;
+
+                var ext = Path.GetExtension(file.FileName);
+                var safeName = $"{Guid.NewGuid()}{ext}";
+                var filePath = Path.Combine(uploadsFolder, safeName);
+
+                await using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                using var tagStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                var abstraction = new StreamFileAbstraction(filePath, tagStream, tagStream);
+                var tfile = TagLib.File.Create(abstraction);
+                var duration = (int)tfile.Properties.Duration.TotalSeconds;
+
+                var newTrack = new Track
+                {
+                    Name = trackMeta.Name,
+                    AlbumId = album.Id,
+                    Duration = duration,
+                    GenreId = request.GenreId,
+                    ReleaseDate = releaseDate,
+                    AudioUrl = safeName,
+                    CoverUrl = request.CoverUrl,
+                    Status = "Активен",
+                    Singers = new List<Singer> { singer }
+                };
+
+                _context.Tracks.Add(newTrack);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Альбом и треки успешно опубликованы.");
         }
 
         [HttpGet("subscriptions")]

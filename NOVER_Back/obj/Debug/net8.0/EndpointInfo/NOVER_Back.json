@@ -1908,26 +1908,57 @@
         }
       }
     },
-    "/api/user/add_track": {
+    "/api/user/publish_track": {
       "post": {
         "tags": [
           "User"
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/TrackDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TrackDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/TrackDTO"
+                "required": [
+                  "File",
+                  "Name"
+                ],
+                "type": "object",
+                "properties": {
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "Name": {
+                    "type": "string"
+                  },
+                  "AlbumId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "GenreId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "CoverUrl": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "File": {
+                  "style": "form"
+                },
+                "Name": {
+                  "style": "form"
+                },
+                "AlbumId": {
+                  "style": "form"
+                },
+                "GenreId": {
+                  "style": "form"
+                },
+                "CoverUrl": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -1938,20 +1969,70 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Track"
+                  "$ref": "#/components/schemas/TrackDTO"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Track"
+                  "$ref": "#/components/schemas/TrackDTO"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Track"
+                  "$ref": "#/components/schemas/TrackDTO"
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/user/publish_album": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "AlbumName": {
+                    "type": "string"
+                  },
+                  "CoverUrl": {
+                    "type": "string"
+                  },
+                  "GenreId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "TracksMeta": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "AlbumName": {
+                  "style": "form"
+                },
+                "CoverUrl": {
+                  "style": "form"
+                },
+                "GenreId": {
+                  "style": "form"
+                },
+                "TracksMeta": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
