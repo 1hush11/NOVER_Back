@@ -5,6 +5,5 @@
         public string AlbumName { get; set; } = null!;
         public string? CoverUrl { get; set; }
         public int? GenreId { get; set; }
-        public string TracksMeta { get; set; } = null!;
     }
 }

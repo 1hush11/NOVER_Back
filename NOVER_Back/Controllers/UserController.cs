@@ -598,8 +598,8 @@ namespace NOVER_Back.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            if (string.IsNullOrWhiteSpace(request.AlbumName) || string.IsNullOrWhiteSpace(request.TracksMeta))
-                return BadRequest("Название альбома или информация о треках не указана.");
+            if (string.IsNullOrWhiteSpace(request.AlbumName))
+                return BadRequest("Название альбома не указано.");
 
             var releaseDate = DateOnly.FromDateTime(DateTime.Now.ToLocalTime());
 
@@ -614,50 +614,7 @@ namespace NOVER_Back.Controllers
             _context.Albums.Add(album);
             await _context.SaveChangesAsync();
 
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "trackAudios");
-            Directory.CreateDirectory(uploadsFolder);
-
-            var trackMetaList = System.Text.Json.JsonSerializer.Deserialize<List<TrackMeta>>(request.TracksMeta);
-
-            foreach (var trackMeta in trackMetaList!)
-            {
-                var file = Request.Form.Files.FirstOrDefault(f => f.Name == trackMeta.FileKey);
-                if (file == null)
-                    continue;
-
-                var ext = Path.GetExtension(file.FileName);
-                var safeName = $"{Guid.NewGuid()}{ext}";
-                var filePath = Path.Combine(uploadsFolder, safeName);
-
-                await using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-
-                using var tagStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-                var abstraction = new StreamFileAbstraction(filePath, tagStream, tagStream);
-                var tfile = TagLib.File.Create(abstraction);
-                var duration = (int)tfile.Properties.Duration.TotalSeconds;
-
-                var newTrack = new Track
-                {
-                    Name = trackMeta.Name,
-                    AlbumId = album.Id,
-                    Duration = duration,
-                    GenreId = request.GenreId,
-                    ReleaseDate = releaseDate,
-                    AudioUrl = safeName,
-                    CoverUrl = request.CoverUrl,
-                    Status = "Активен",
-                    Singers = new List<Singer> { singer }
-                };
-
-                _context.Tracks.Add(newTrack);
-            }
-
-            await _context.SaveChangesAsync();
-
-            return Ok("Альбом и треки успешно опубликованы.");
+            return Ok(new { album.Id, Message = "Альбом успешно опубликован." });
         }
 
         [HttpGet("subscriptions")]

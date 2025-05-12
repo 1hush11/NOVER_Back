@@ -2007,9 +2007,6 @@
                   "GenreId": {
                     "type": "integer",
                     "format": "int32"
-                  },
-                  "TracksMeta": {
-                    "type": "string"
                   }
                 }
               },
@@ -2021,9 +2018,6 @@
                   "style": "form"
                 },
                 "GenreId": {
-                  "style": "form"
-                },
-                "TracksMeta": {
                   "style": "form"
                 }
               }
