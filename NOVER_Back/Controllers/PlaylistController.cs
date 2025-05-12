@@ -81,16 +81,34 @@ namespace NOVER_Back.Controllers
         }
 
         [HttpPost("add_playlist")]
-        public async Task<ActionResult> CreatePlaylist([FromBody] PlaylistDTO playlist)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult> AddPlaylist([FromForm] PlaylistDTO playlist)
         {
             var userId = GetCurrentUserId();
             if (userId == null)
                 return Unauthorized("Не авторизован.");
 
+            string? coverFileName = null;
+            if (playlist.CoverUrl != null && playlist.CoverUrl.Length > 0)
+            {
+                var folder = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "PlaylistCovers");
+                Directory.CreateDirectory(folder);
+
+                var originalFileName = Path.GetFileName(playlist.CoverUrl.FileName);
+                var filePath = Path.Combine(folder, originalFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await playlist.CoverUrl.CopyToAsync(stream);
+                }
+
+                coverFileName = originalFileName;
+            }
+
             var newPlaylist = new Playlist
             {
                 Title = playlist.Title,
-                CoverUrl = playlist.CoverUrl,
+                CoverUrl = coverFileName,
                 Description = playlist.Description,
                 Type = playlist.Type,
                 CreatedAt = DateTime.Now,
@@ -111,7 +129,6 @@ namespace NOVER_Back.Controllers
 
             return Ok(new { newPlaylist.Id });
         }
-
 
         [HttpPost("playlists/{id}/add")]
         public async Task<IActionResult> AddTrackToPlaylist(int id, [FromBody] int trackId)
@@ -154,8 +171,9 @@ namespace NOVER_Back.Controllers
             return Ok("Трек удалён.");
         }
 
-        [HttpPut("playlists/{id}/edit")]
-        public async Task<IActionResult> EditPlaylist(int id, [FromBody] PlaylistDTO updatedPlaylist)
+        [HttpPost("playlists/{id}/edit")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> EditPlaylist(int id, [FromForm] PlaylistDTO updatedPlaylist)
         {
             var userId = GetCurrentUserId();
             if (userId == null)
@@ -170,8 +188,23 @@ namespace NOVER_Back.Controllers
 
             playlist.Title = updatedPlaylist.Title;
             playlist.Description = updatedPlaylist.Description;
-            playlist.CoverUrl = updatedPlaylist.CoverUrl;
             playlist.Type = updatedPlaylist.Type;
+
+            if (updatedPlaylist.CoverUrl != null && updatedPlaylist.CoverUrl.Length > 0)
+            {
+                var folder = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "PlaylistCovers");
+                Directory.CreateDirectory(folder);
+
+                var fileName = Path.GetFileName(updatedPlaylist.CoverUrl.FileName);
+                var path = Path.Combine(folder, fileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await updatedPlaylist.CoverUrl.CopyToAsync(stream);
+                }
+
+                playlist.CoverUrl = fileName;
+            }
 
             await _context.SaveChangesAsync();
 

@@ -44,8 +44,9 @@ namespace NOVER_Back.Controllers
             return Ok(user);
         }
 
-        [HttpPut("update")]
-        public async Task<ActionResult<User>> UpdateProfile([FromBody] UserDTO userToUpdate)
+        [HttpPost("update")]
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<User>> UpdateProfile([FromForm] UserDTO userToUpdate)
         {
             var userId = GetCurrentUserId();
             if (userId == null)
@@ -66,11 +67,27 @@ namespace NOVER_Back.Controllers
             if (!string.IsNullOrEmpty(userToUpdate.Username))
                 user.Username = userToUpdate.Username;
 
-            if (!string.IsNullOrEmpty(userToUpdate.Avatar))
-                user.Avatar = userToUpdate.Avatar;
+            if (userToUpdate.AvatarFile != null && userToUpdate.AvatarFile.Length > 0)
+            {
+                var folder = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "UserCovers");
+                Directory.CreateDirectory(folder);
 
-            var hasher = new PasswordHasher<User>();
-            user.PasswordHash = hasher.HashPassword(user, userToUpdate.PasswordHash);
+                var originalFileName = Path.GetFileName(userToUpdate.AvatarFile.FileName);
+                var filePath = Path.Combine(folder, originalFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await userToUpdate.AvatarFile.CopyToAsync(stream);
+                }
+
+                user.Avatar = originalFileName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(userToUpdate.PasswordHash))
+            {
+                var hasher = new PasswordHasher<User>();
+                user.PasswordHash = hasher.HashPassword(user, userToUpdate.PasswordHash);
+            }
 
             await _context.SaveChangesAsync();
             return Ok(user);
@@ -104,35 +121,51 @@ namespace NOVER_Back.Controllers
         }
 
         [HttpPost("signup")]
-        public async Task<ActionResult<User>> SignUp([FromBody] UserDTO user)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<User>> SignUp([FromForm] UserDTO user)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var exists = await _context.Users.AnyAsync(u => (u.Login == user.Login || u.Username == user.Username) || (u.Login == user.Login && u.Username == user.Username));
-            if (exists)
-                return Conflict($"Пользователь с таким именем или логином уже существует.");
+            var existingUser = await _context.Users.AnyAsync(u => u.Login == user.Login || u.Username == user.Username);
+            if (existingUser)
+                return Conflict("Пользователь с таким именем или логином уже существует.");
+
+            string? avatarFileName = null;
+            if (user.AvatarFile != null)
+            {
+                var avatarFolder = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "UserCovers");
+                Directory.CreateDirectory(avatarFolder);
+
+                var originalFileName = Path.GetFileName(user.AvatarFile.FileName);
+                var avatarPath = Path.Combine(avatarFolder, originalFileName);
+
+                using (var avatarFileStream = new FileStream(avatarPath, FileMode.Create))
+                {
+                    await user.AvatarFile.CopyToAsync(avatarFileStream);
+                }
+
+                avatarFileName = originalFileName;
+            }
 
             var passwordHasher = new PasswordHasher<User>();
-            var registrationDate = DateTime.UtcNow.ToLocalTime();
-
             var newUser = new User
             {
                 Username = user.Username,
                 Login = user.Login,
-                Avatar = user.Avatar,
-                RegistrationDate = registrationDate,
+                Avatar = avatarFileName,
+                RegistrationDate = DateTime.UtcNow.ToLocalTime(),
                 Role = "Пользователь",
-                Status = "Активен"
+                Status = "Активен",
+                PasswordHash = passwordHasher.HashPassword(null!, user.PasswordHash!)
             };
-
-            newUser.PasswordHash = passwordHasher.HashPassword(newUser, user.PasswordHash);
 
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
 
             return Ok(newUser);
         }
+
 
         [HttpGet("library/tracks")]
         public async Task<ActionResult<IEnumerable<TrackDTO>>> GetUserLibraryTracks()
@@ -531,12 +564,28 @@ namespace NOVER_Back.Controllers
 
             var releaseDate = DateOnly.FromDateTime(DateTime.Now.ToLocalTime());
 
-            using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            var abstraction = new StreamFileAbstraction(filePath, stream, stream);
+            using var audioStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            var abstraction = new StreamFileAbstraction(filePath, audioStream, audioStream);
             var tfile = TagLib.File.Create(abstraction);
 
             var durationInSeconds = (int)tfile.Properties.Duration.TotalSeconds;
 
+            string? coverFileName = null;
+            if (request.CoverFile != null)
+            {
+                var coverFolder = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "TrackCovers");
+                Directory.CreateDirectory(coverFolder);
+
+                var originalFileName = Path.GetFileName(request.CoverFile.FileName);
+                var coverPath = Path.Combine(coverFolder, originalFileName);
+
+                using (var coverStream = new FileStream(coverPath, FileMode.Create))
+                {
+                    await request.CoverFile.CopyToAsync(coverStream);
+                }
+
+                coverFileName = originalFileName;
+            }
 
             var newTrack = new Track
             {
@@ -546,7 +595,7 @@ namespace NOVER_Back.Controllers
                 GenreId = request.GenreId,
                 ReleaseDate = releaseDate,
                 AudioUrl = safeName,
-                CoverUrl = request.CoverUrl,
+                CoverUrl = coverFileName,
                 Status = "Активен",
                 Singers = new List<Singer> { singer }
             };
@@ -601,14 +650,30 @@ namespace NOVER_Back.Controllers
             if (string.IsNullOrWhiteSpace(request.AlbumName))
                 return BadRequest("Название альбома не указано.");
 
-            var releaseDate = DateOnly.FromDateTime(DateTime.Now.ToLocalTime());
+            string? coverFileName = null;
+            if (request.CoverFile != null)
+            {
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "AlbumCovers");
+                Directory.CreateDirectory(folderPath);
+
+                var originalFileName = Path.GetFileName(request.CoverFile.FileName);
+                var filePath = Path.Combine(folderPath, originalFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await request.CoverFile.CopyToAsync(stream);
+                }
+
+                coverFileName = originalFileName;
+            }
+
 
             var album = new Album
             {
                 Name = request.AlbumName,
                 SingerId = singer.Id,
-                CoverUrl = request.CoverUrl,
-                ReleaseDate = releaseDate
+                CoverUrl = coverFileName,
+                ReleaseDate = DateOnly.FromDateTime(DateTime.Now.ToLocalTime())
             };
 
             _context.Albums.Add(album);

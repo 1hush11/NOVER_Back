@@ -14,6 +14,6 @@ namespace NOVER_Back.Models
 
         public int? GenreId { get; set; }
 
-        public string? CoverUrl { get; set; }
+        public IFormFile? CoverFile { get; set; }
     }
 }

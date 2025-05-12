@@ -8,9 +8,8 @@
 
         public string Login { get; set; } = null!;
 
-        public string PasswordHash { get; set; } = null!;
+        public string? PasswordHash { get; set; }
 
-        public string? Avatar { get; set; }
-
+        public IFormFile? AvatarFile { get; set; }
     }
 }

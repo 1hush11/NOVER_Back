@@ -524,19 +524,59 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/PlaylistDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PlaylistDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/PlaylistDTO"
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "CreatorId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Title": {
+                    "type": "string"
+                  },
+                  "CoverUrl": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "Type": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "Id": {
+                  "style": "form"
+                },
+                "CreatorId": {
+                  "style": "form"
+                },
+                "Title": {
+                  "style": "form"
+                },
+                "CoverUrl": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "CreatedAt": {
+                  "style": "form"
+                },
+                "Type": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -639,7 +679,7 @@
       }
     },
     "/api/playlist/playlists/{id}/edit": {
-      "put": {
+      "post": {
         "tags": [
           "Playlist"
         ],
@@ -656,19 +696,59 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/PlaylistDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PlaylistDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/PlaylistDTO"
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "CreatorId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Title": {
+                    "type": "string"
+                  },
+                  "CoverUrl": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "Type": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "Id": {
+                  "style": "form"
+                },
+                "CreatorId": {
+                  "style": "form"
+                },
+                "Title": {
+                  "style": "form"
+                },
+                "CoverUrl": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "CreatedAt": {
+                  "style": "form"
+                },
+                "Type": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -1548,25 +1628,51 @@
       }
     },
     "/api/user/update": {
-      "put": {
+      "post": {
         "tags": [
           "User"
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UserDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserDTO"
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Username": {
+                    "type": "string"
+                  },
+                  "Login": {
+                    "type": "string"
+                  },
+                  "PasswordHash": {
+                    "type": "string"
+                  },
+                  "AvatarFile": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Id": {
+                  "style": "form"
+                },
+                "Username": {
+                  "style": "form"
+                },
+                "Login": {
+                  "style": "form"
+                },
+                "PasswordHash": {
+                  "style": "form"
+                },
+                "AvatarFile": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -1643,19 +1749,45 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UserDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserDTO"
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Username": {
+                    "type": "string"
+                  },
+                  "Login": {
+                    "type": "string"
+                  },
+                  "PasswordHash": {
+                    "type": "string"
+                  },
+                  "AvatarFile": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Id": {
+                  "style": "form"
+                },
+                "Username": {
+                  "style": "form"
+                },
+                "Login": {
+                  "style": "form"
+                },
+                "PasswordHash": {
+                  "style": "form"
+                },
+                "AvatarFile": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -1938,8 +2070,9 @@
                     "type": "integer",
                     "format": "int32"
                   },
-                  "CoverUrl": {
-                    "type": "string"
+                  "CoverFile": {
+                    "type": "string",
+                    "format": "binary"
                   }
                 }
               },
@@ -1956,7 +2089,7 @@
                 "GenreId": {
                   "style": "form"
                 },
-                "CoverUrl": {
+                "CoverFile": {
                   "style": "form"
                 }
               }
@@ -2001,8 +2134,9 @@
                   "AlbumName": {
                     "type": "string"
                   },
-                  "CoverUrl": {
-                    "type": "string"
+                  "CoverFile": {
+                    "type": "string",
+                    "format": "binary"
                   },
                   "GenreId": {
                     "type": "integer",
@@ -2014,7 +2148,7 @@
                 "AlbumName": {
                   "style": "form"
                 },
-                "CoverUrl": {
+                "CoverFile": {
                   "style": "form"
                 },
                 "GenreId": {
@@ -2298,42 +2432,6 @@
             "items": {
               "$ref": "#/components/schemas/Track"
             },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "PlaylistDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "creatorId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "coverUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "type": {
-            "type": "string",
             "nullable": true
           }
         },
@@ -2688,32 +2786,6 @@
             "items": {
               "$ref": "#/components/schemas/Track"
             },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "username": {
-            "type": "string",
-            "nullable": true
-          },
-          "login": {
-            "type": "string",
-            "nullable": true
-          },
-          "passwordHash": {
-            "type": "string",
-            "nullable": true
-          },
-          "avatar": {
-            "type": "string",
             "nullable": true
           }
         },

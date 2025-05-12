@@ -8,7 +8,7 @@
 
         public string Title { get; set; } = null!;
 
-        public string? CoverUrl { get; set; }
+        public IFormFile? CoverUrl { get; set; }
 
         public string? Description { get; set; }
 
