@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NOVER_Back")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+12382ddc244d2fe426713bb700279c03cc066164")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+389a361a1fe76541be83b30a9b35e2742ecaf762")]
 [assembly: System.Reflection.AssemblyProductAttribute("NOVER_Back")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NOVER_Back")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

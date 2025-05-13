@@ -456,6 +456,52 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "NOVER_Back.Controllers.ReviewController",
+    "Method": "GetAllReviews",
+    "RelativePath": "api/review/reviews",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.ReviewController",
+    "Method": "GetTopRatedTracks",
+    "RelativePath": "api/review/top",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.ReviewController",
+    "Method": "GetTopRatedTracksByGenre",
+    "RelativePath": "api/review/top_by_genre",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.ReviewController",
+    "Method": "GetReviewsByTrack",
+    "RelativePath": "api/review/track/{trackId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trackId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "NOVER_Back.Controllers.SearchController",
     "Method": "Search",
     "RelativePath": "api/search",
@@ -1204,6 +1250,22 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "Review",
+    "RelativePath": "api/user/review",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "review",
+        "Type": "NOVER_Back.Models.DTOs.ReviewDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
     "Method": "SignUp",
     "RelativePath": "api/user/signup",
     "HttpMethod": "POST",
@@ -1323,5 +1385,21 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "UpdateReview",
+    "RelativePath": "api/user/update_review",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "review",
+        "Type": "NOVER_Back.Models.DTOs.ReviewDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]
