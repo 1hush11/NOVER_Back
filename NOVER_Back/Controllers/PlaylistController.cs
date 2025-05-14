@@ -35,6 +35,9 @@ namespace NOVER_Back.Controllers
             var savedCount = await _context.UserPlaylists
                 .CountAsync(up => up.PlaylistId == id && (up.IsOwner ?? false) == false);
 
+            var inLibrary = currentUserId != null && await _context.UserPlaylists.AnyAsync(up => up.UserId == currentUserId && up.PlaylistId == id);
+
+
             return Ok(new
             {
                 playlist.Id,
@@ -59,7 +62,8 @@ namespace NOVER_Back.Controllers
                     Singers = t.Singers.Select(s => s.Name).ToList()
                 }).ToList(),
                 savedCount,
-                isOwner
+                isOwner,
+                inLibrary
             });
         }
 

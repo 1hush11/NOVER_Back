@@ -17,19 +17,23 @@ namespace NOVER_Back.Controllers
         }
 
         [HttpGet("singers")]
-        public async Task<ActionResult<IEnumerable<SingerDTO>>> GetSingers()
+        public async Task<ActionResult<IEnumerable<object>>> GetSingers()
         {
-            var singers = await _context.Singers.ToListAsync();
+            var singers = await _context.Singers
+                .Include(s => s.Tracks)
+                .ToListAsync();
 
-            var result = singers.Select(s => new SingerDTO
+            var result = singers.Select(s => new
             {
                 Id = s.Id,
                 Name = s.Name,
                 PhotoUrl = s.PhotoUrl,
                 Description = s.Description,
                 ViewCount = s.ViewCount,
-                SubscribersCount = s.SubscribersCount
-            }).ToList();
+                SubscribersCount = s.SubscribersCount,
+                TotalTracks = s.Tracks.Count,
+                TotalPlayCount = s.Tracks.Sum(t => (long)(t.PlayCount ?? 0))
+            });
 
             return Ok(result);
         }

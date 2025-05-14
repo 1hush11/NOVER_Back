@@ -457,6 +457,26 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.ReviewController",
+    "Method": "GenerateGenrePlaylists",
+    "RelativePath": "api/review/generate_genre_playlists",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.ReviewController",
+    "Method": "GetPlaylistsByGenre",
+    "RelativePath": "api/review/playlists_by_genre",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.ReviewController",
     "Method": "GetAllReviews",
     "RelativePath": "api/review/reviews",
     "HttpMethod": "GET",
@@ -502,6 +522,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "NOVER_Back.Controllers.ReviewController",
+    "Method": "UpdateGenrePlaylists",
+    "RelativePath": "api/review/update_genre_playlists",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "NOVER_Back.Controllers.SearchController",
     "Method": "Search",
     "RelativePath": "api/search",
@@ -527,7 +557,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[NOVER_Back.Models.DTOs.SingerDTO, NOVER_Back, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

@@ -497,7 +497,7 @@ namespace NOVER_Back.Controllers
                 return Unauthorized();
 
             var link = await _context.UserPlaylists
-                .FirstOrDefaultAsync(up => up.UserId == userId && up.PlaylistId == playlistId && up.IsOwner == false);
+                .FirstOrDefaultAsync(up => up.UserId == userId && up.PlaylistId == playlistId);
 
             if (link == null)
                 return NotFound("Плейлист не найден в медиатеке.");

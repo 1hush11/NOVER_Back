@@ -3,8 +3,24 @@
   "WorkspaceRootPath": "A:\\Visual Studio Projects\\NOVER_Back\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|a:\\visual studio projects\\nover_back\\nover_back\\controllers\\singercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|solutionrelative:nover_back\\controllers\\singercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|a:\\visual studio projects\\nover_back\\nover_back\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|solutionrelative:nover_back\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|a:\\visual studio projects\\nover_back\\nover_back\\controllers\\playlistcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|solutionrelative:nover_back\\controllers\\playlistcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|a:\\visual studio projects\\nover_back\\nover_back\\controllers\\reviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|solutionrelative:nover_back\\controllers\\reviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|a:\\visual studio projects\\nover_back\\nover_back\\models\\playlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|solutionrelative:nover_back\\models\\playlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|a:\\visual studio projects\\nover_back\\nover_back\\controllers\\trackcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -19,10 +35,6 @@
       "RelativeMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|solutionrelative:nover_back\\models\\dtos\\reviewdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|a:\\visual studio projects\\nover_back\\nover_back\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|solutionrelative:nover_back\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|a:\\visual studio projects\\nover_back\\nover_back\\models\\comment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|solutionrelative:nover_back\\models\\comment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -33,10 +45,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|a:\\visual studio projects\\nover_back\\nover_back\\models\\rating.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|solutionrelative:nover_back\\models\\rating.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|a:\\visual studio projects\\nover_back\\nover_back\\controllers\\playlistcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|solutionrelative:nover_back\\controllers\\playlistcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|a:\\visual studio projects\\nover_back\\nover_back\\models\\dtos\\playlistdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -73,10 +81,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|a:\\visual studio projects\\nover_back\\nover_back\\models\\singer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|solutionrelative:nover_back\\models\\singer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|a:\\visual studio projects\\nover_back\\nover_back\\controllers\\singercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|solutionrelative:nover_back\\controllers\\singercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C54AFBE5-E139-43E1-A40D-45BAD355411F}|NOVER_Back\\NOVER_Back.csproj|a:\\visual studio projects\\nover_back\\nover_back\\controllers\\albumcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -126,115 +130,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 9,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\UserController.cs",
-              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\UserController.cs",
-              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\UserController.cs",
-              "RelativeToolTip": "NOVER_Back\\Controllers\\UserController.cs",
-              "ViewState": "AgIAACYDAAAAAAAAAAAIwC8DAABEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-04T19:36:59.338Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "TrackController.cs",
-              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\TrackController.cs",
-              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\TrackController.cs",
-              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\TrackController.cs",
-              "RelativeToolTip": "NOVER_Back\\Controllers\\TrackController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-04T20:02:21.681Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "AlbumController.cs",
-              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\AlbumController.cs",
-              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\AlbumController.cs",
-              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\AlbumController.cs",
-              "RelativeToolTip": "NOVER_Back\\Controllers\\AlbumController.cs",
-              "ViewState": "AgIAAGcAAAAAAAAAAIAwwHQAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-05T11:18:42.579Z",
-              "IsPinned": true
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "SingerController.cs",
-              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\SingerController.cs",
-              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\SingerController.cs",
-              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\SingerController.cs",
-              "RelativeToolTip": "NOVER_Back\\Controllers\\SingerController.cs",
-              "ViewState": "AgIAANEAAAAAAAAAAAAMwN8AAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-05T12:01:07.247Z",
-              "IsPinned": true
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "GenreController.cs",
-              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\GenreController.cs",
-              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\GenreController.cs",
-              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\GenreController.cs",
-              "RelativeToolTip": "NOVER_Back\\Controllers\\GenreController.cs",
-              "ViewState": "AgIAAHsAAAAAAAAAAAAMwIkAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T12:31:04.376Z",
-              "IsPinned": true
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "PlaylistController.cs",
-              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\PlaylistController.cs",
-              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\PlaylistController.cs",
-              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\PlaylistController.cs",
-              "RelativeToolTip": "NOVER_Back\\Controllers\\PlaylistController.cs",
-              "ViewState": "AgIAAMQAAAAAAAAAAAAcwNMAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T13:04:09.915Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "SearchController.cs",
-              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\SearchController.cs",
-              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\SearchController.cs",
-              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\SearchController.cs",
-              "RelativeToolTip": "NOVER_Back\\Controllers\\SearchController.cs",
-              "ViewState": "AgIAACUAAAAAAAAAAAAMwDMAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-08T18:48:36.151Z",
-              "IsPinned": true
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ReviewController.cs",
-              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\ReviewController.cs",
-              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\ReviewController.cs",
-              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\ReviewController.cs*",
-              "RelativeToolTip": "NOVER_Back\\Controllers\\ReviewController.cs*",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAowBEAAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-13T12:26:37.142Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
@@ -261,7 +158,128 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\UserController.cs",
+              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\UserController.cs",
+              "RelativeToolTip": "NOVER_Back\\Controllers\\UserController.cs",
+              "ViewState": "AgIAAOcBAAAAAAAAAAAwwPMBAABdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-04T19:36:59.338Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TrackController.cs",
+              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\TrackController.cs",
+              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\TrackController.cs",
+              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\TrackController.cs",
+              "RelativeToolTip": "NOVER_Back\\Controllers\\TrackController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-04T20:02:21.681Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "AlbumController.cs",
+              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\AlbumController.cs",
+              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\AlbumController.cs",
+              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\AlbumController.cs",
+              "RelativeToolTip": "NOVER_Back\\Controllers\\AlbumController.cs",
+              "ViewState": "AgIAAGcAAAAAAAAAAIAwwHQAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-05T11:18:42.579Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SingerController.cs",
+              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\SingerController.cs",
+              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\SingerController.cs",
+              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\SingerController.cs*",
+              "RelativeToolTip": "NOVER_Back\\Controllers\\SingerController.cs*",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAUwCIAAABMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-05T12:01:07.247Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "GenreController.cs",
+              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\GenreController.cs",
+              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\GenreController.cs",
+              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\GenreController.cs",
+              "RelativeToolTip": "NOVER_Back\\Controllers\\GenreController.cs",
+              "ViewState": "AgIAAHsAAAAAAAAAAAAMwIkAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-06T12:31:04.376Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PlaylistController.cs",
+              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\PlaylistController.cs",
+              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\PlaylistController.cs",
+              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\PlaylistController.cs",
+              "RelativeToolTip": "NOVER_Back\\Controllers\\PlaylistController.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAqwEEAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-06T13:04:09.915Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "SearchController.cs",
+              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\SearchController.cs",
+              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\SearchController.cs",
+              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\SearchController.cs",
+              "RelativeToolTip": "NOVER_Back\\Controllers\\SearchController.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAMwDMAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-08T18:48:36.151Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "ReviewController.cs",
+              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\ReviewController.cs",
+              "RelativeDocumentMoniker": "NOVER_Back\\Controllers\\ReviewController.cs",
+              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Controllers\\ReviewController.cs",
+              "RelativeToolTip": "NOVER_Back\\Controllers\\ReviewController.cs",
+              "ViewState": "AgIAAJwAAAAAAAAAAAAiwIcAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-13T12:26:37.142Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Playlist.cs",
+              "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\Playlist.cs",
+              "RelativeDocumentMoniker": "NOVER_Back\\Models\\Playlist.cs",
+              "ToolTip": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\Playlist.cs",
+              "RelativeToolTip": "NOVER_Back\\Models\\Playlist.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAA1wBsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-14T12:16:16.187Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "ReviewDTO.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\DTOs\\ReviewDTO.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\DTOs\\ReviewDTO.cs",
@@ -269,12 +287,11 @@
               "RelativeToolTip": "NOVER_Back\\Models\\DTOs\\ReviewDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-13T11:56:33.677Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-13T11:56:33.677Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "Track.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\Track.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\Track.cs",
@@ -282,12 +299,11 @@
               "RelativeToolTip": "NOVER_Back\\Models\\Track.cs",
               "ViewState": "AgIAABYAAAAAAAAAAAAIwCsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-10T17:35:54.801Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-10T17:35:54.801Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "Comment.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\Comment.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\Comment.cs",
@@ -295,12 +311,11 @@
               "RelativeToolTip": "NOVER_Back\\Models\\Comment.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-13T11:54:22.353Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-13T11:54:22.353Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "Complaint.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\Complaint.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\Complaint.cs",
@@ -308,12 +323,11 @@
               "RelativeToolTip": "NOVER_Back\\Models\\Complaint.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-13T11:54:21.304Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-13T11:54:21.304Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 10,
               "Title": "Rating.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\Rating.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\Rating.cs",
@@ -321,12 +335,11 @@
               "RelativeToolTip": "NOVER_Back\\Models\\Rating.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-13T10:42:58.124Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-13T10:42:58.124Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "UserDTO.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\DTOs\\UserDTO.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\DTOs\\UserDTO.cs",
@@ -338,7 +351,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "PublishTrackRequest.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\PublishTrackRequest.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\PublishTrackRequest.cs",
@@ -350,7 +363,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "PlaylistDTO.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\DTOs\\PlaylistDTO.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\DTOs\\PlaylistDTO.cs",
@@ -362,7 +375,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "PublishAlbumRequest.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\PublishAlbumRequest.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\PublishAlbumRequest.cs",
@@ -374,7 +387,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 15,
               "Title": "Program.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Program.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Program.cs",
@@ -386,7 +399,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 19,
               "Title": "Singer.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\Singer.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\Singer.cs",
@@ -398,7 +411,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 18,
               "Title": "TrackDTO.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\DTOs\\TrackDTO.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\DTOs\\TrackDTO.cs",
@@ -410,7 +423,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 16,
               "Title": "Album.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\Album.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\Album.cs",
@@ -422,7 +435,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 17,
               "Title": "DbNoverContext.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\DbNoverContext.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\DbNoverContext.cs",
@@ -434,7 +447,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 23,
               "Title": "Genre.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\Genre.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\Genre.cs",
@@ -446,7 +459,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 24,
               "Title": "User.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\User.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\User.cs",
@@ -458,7 +471,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 27,
               "Title": "NOVER_Back.http",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\NOVER_Back.http",
               "RelativeDocumentMoniker": "NOVER_Back\\NOVER_Back.http",
@@ -470,7 +483,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 25,
               "Title": "LoginDTO.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\DTOs\\LoginDTO.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\DTOs\\LoginDTO.cs",
@@ -482,7 +495,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 26,
               "Title": "appsettings.json",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\appsettings.json",
               "RelativeDocumentMoniker": "NOVER_Back\\appsettings.json",
@@ -494,7 +507,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 28,
               "Title": "SingerDTO.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\DTOs\\SingerDTO.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\DTOs\\SingerDTO.cs",
@@ -506,7 +519,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 29,
               "Title": "AlbumWithTrackDTO.cs",
               "DocumentMoniker": "A:\\Visual Studio Projects\\NOVER_Back\\NOVER_Back\\Models\\DTOs\\AlbumWithTrackDTO.cs",
               "RelativeDocumentMoniker": "NOVER_Back\\Models\\DTOs\\AlbumWithTrackDTO.cs",
