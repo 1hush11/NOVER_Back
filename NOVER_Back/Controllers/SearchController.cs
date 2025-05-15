@@ -28,14 +28,16 @@ namespace NOVER_Back.Controllers
                 .Include(t => t.Singers)
                 .Include(t => t.Genre)
                 .Include(t => t.Album)
-                .Where(t => EF.Functions.ILike(t.Name, $"%{query}%") || t.Singers.Any(s => EF.Functions.ILike(s.Name, $"%{query}%")))
+                .Where(t => EF.Functions.ILike(t.Name, $"%{query}%")
+                         || t.Singers.Any(s => EF.Functions.ILike(s.Name, $"%{query}%")))
                 .Select(t => new
                 {
                     Id = t.Id,
-                    Title = t.Name,
+                    Name = t.Name,
                     Duration = t.Duration,
                     Genre = t.Genre,
                     Album = t.Album,
+                    AlbumName = t.Album!.Name,
                     AudioUrl = t.AudioUrl,
                     CoverUrl = t.CoverUrl,
                     Singers = t.Singers.Select(s => s.Name).ToList(),
@@ -96,13 +98,27 @@ namespace NOVER_Back.Controllers
                     Type = "playlist"
                 }).ToListAsync();
 
+            // Поиск по пользователям (логин и имя)
+            var users = await _context.Users
+                .Where(u => EF.Functions.ILike(u.Username, $"%{query}%")
+                         || EF.Functions.ILike(u.Login, $"%{query}%"))
+                .Select(u => new
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                    Login = u.Login,
+                    Role = u.Role,
+                    Type = "user"
+                }).ToListAsync();
+
             return Ok(new
             {
                 tracks,
                 singers,
                 albums,
                 genres,
-                playlists
+                playlists,
+                users
             });
         }
     }

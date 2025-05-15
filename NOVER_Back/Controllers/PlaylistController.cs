@@ -47,6 +47,7 @@ namespace NOVER_Back.Controllers
                 playlist.CreatedAt,
                 playlist.Type,
                 Creator = playlist.Creator?.Username,
+                CreatorRole = playlist.Creator?.Role,
                 Tracks = playlist.Tracks.Select(t => new TrackDTO
                 {
                     Id = t.Id,
@@ -77,7 +78,8 @@ namespace NOVER_Back.Controllers
                     p.Title,
                     p.CoverUrl,
                     p.Description,
-                    Creator = p.Creator!.Username
+                    Creator = p.Creator!.Username,
+                    CreatorRole = p.Creator.Role,
                 })
                 .ToListAsync();
 

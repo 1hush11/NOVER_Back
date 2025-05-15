@@ -27,6 +27,9 @@ namespace NOVER_Back.Controllers
             if (user == null)
                 return Unauthorized("Неверный логин или пароль.");
 
+            if (user.Status == "Заблокирован")
+                return Conflict("Пользователь заблокирован в системе");
+
             var passwordHasher = new PasswordHasher<User>();
             var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, credentials.Password);
 
@@ -281,6 +284,7 @@ namespace NOVER_Back.Controllers
                     up.Playlist.CreatedAt,
                     up.Playlist.Type,
                     Creator = up.Playlist.Creator?.Username ?? "Неизвестно",
+                    CreatorRole = up.Playlist.Creator?.Role,
                     IsOwner = true
                 }),
                 Saved = savedPlaylists.Select(up => new
@@ -292,6 +296,7 @@ namespace NOVER_Back.Controllers
                     up.Playlist.CreatedAt,
                     up.Playlist.Type,
                     Creator = up.Playlist.Creator?.Username ?? "Неизвестно",
+                    CreatorRole = up.Playlist.Creator?.Role,
                     IsOwner = false
                 })
             };
@@ -414,12 +419,8 @@ namespace NOVER_Back.Controllers
         [HttpGet("playlists/others")]
         public async Task<IActionResult> GetPublicPlaylistsFromOthers()
         {
-            var userId = GetCurrentUserId();
-            if (userId == null)
-                return Unauthorized("Пользователь не авторизован.");
-
             var playlists = await _context.Playlists
-                .Where(p => p.CreatorId != userId && p.Type == "public")
+                .Where(p => p.Type == "public")
                 .Include(p => p.Creator)
                 .Select(p => new {
                     p.Id,
@@ -428,7 +429,8 @@ namespace NOVER_Back.Controllers
                     p.Description,
                     p.CreatedAt,
                     p.Type,
-                    Creator = p.Creator!.Username
+                    Creator = p.Creator!.Username,
+                    CreatorRole = p.Creator!.Role,
                 })
                 .ToListAsync();
 
@@ -453,7 +455,8 @@ namespace NOVER_Back.Controllers
                     up.Playlist.Description,
                     up.Playlist.CreatedAt,
                     up.Playlist.Type,
-                    Creator = up.Playlist.Creator!.Username
+                    Creator = up.Playlist.Creator!.Username,
+                    CreatorRole = up.Playlist.Creator!.Role,
                 })
                 .ToListAsync();
 
@@ -596,7 +599,7 @@ namespace NOVER_Back.Controllers
                 ReleaseDate = releaseDate,
                 AudioUrl = safeName,
                 CoverUrl = coverFileName,
-                Status = "Активен",
+                Status = "На модерации",
                 Singers = new List<Singer> { singer }
             };
 

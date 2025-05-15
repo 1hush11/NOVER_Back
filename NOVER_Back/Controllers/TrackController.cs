@@ -20,12 +20,13 @@ namespace NOVER_Back.Controllers
         public async Task<ActionResult<IEnumerable<TrackDTO>>> GetTracks()
         {
             var tracks = await _context.Tracks
+                .OrderBy(t => t.Id)
                 .Include(t => t.Album)
                 .Include(t => t.Genre)
                 .Include(t => t.Singers)
                 .ToListAsync();
 
-            var result = tracks.Select(t => new TrackDTO
+            var result = tracks.Where(t => t.Status == "Активен").Select(t => new TrackDTO
             {
                 Id = t.Id,
                 Name = t.Name,
@@ -49,6 +50,7 @@ namespace NOVER_Back.Controllers
         public async Task<ActionResult<TrackDTO>> GetTrackById([FromRoute] int id)
         {
             var track = await _context.Tracks
+                .OrderBy(t => t.Id)
                 .Include(t => t.Album)
                 .Include(t => t.Genre)
                 .Include(t => t.Singers)
@@ -98,7 +100,7 @@ namespace NOVER_Back.Controllers
                 return NotFound($"Не найдено ни одного из топ {count} треков.");
             }
 
-            var dto = topTracks.Select(t => new TrackDTO
+            var dto = topTracks.Where(t => t.Status == "Активен").Select(t => new TrackDTO
             {
                 Id = t.Id,
                 Name = t.Name,
@@ -116,7 +118,6 @@ namespace NOVER_Back.Controllers
             }).ToList();
 
             return Ok(dto);
-
         }
 
         [HttpPost("add_track")]

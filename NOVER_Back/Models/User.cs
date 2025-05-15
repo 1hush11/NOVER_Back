@@ -14,7 +14,7 @@ public partial class User
     public string PasswordHash { get; set; } = null!;
 
     public string? Avatar { get; set; }
-
+        
     public DateTime? RegistrationDate { get; set; }
 
     public string Role { get; set; } = null!;

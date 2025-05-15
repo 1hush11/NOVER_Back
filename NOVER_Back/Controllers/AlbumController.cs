@@ -21,6 +21,7 @@ namespace NOVER_Back.Controllers
         public async Task<ActionResult<IEnumerable<AlbumWithTrackDTO>>> GetAlbums()
         {
             var albums = await _context.Albums
+                .OrderBy(t => t.Id)
                 .Include(a => a.Singer)
                 .Include(a => a.Tracks)
                 .ToListAsync();

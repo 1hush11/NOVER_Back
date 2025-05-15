@@ -128,6 +128,8 @@ namespace NOVER_Back.Controllers
                 Id = p.Id,
                 Title = p.Title,
                 CoverUrl = p.CoverUrl,
+                Creator = p.Creator?.Username,
+                CreatorRole = p.Creator?.Role,
                 Tracks = p.Tracks.Select(t => new
                 {
                     Id = t.Id,

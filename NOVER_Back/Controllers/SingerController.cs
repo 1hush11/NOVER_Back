@@ -20,6 +20,7 @@ namespace NOVER_Back.Controllers
         public async Task<ActionResult<IEnumerable<object>>> GetSingers()
         {
             var singers = await _context.Singers
+                .OrderBy(s => s.Id)
                 .Include(s => s.Tracks)
                 .ToListAsync();
 

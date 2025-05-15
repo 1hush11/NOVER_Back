@@ -21,12 +21,6 @@ A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\scopedcss\bundl
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\staticwebassets.build.json
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\staticwebassets.development.json
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\staticwebassets\msbuild.NOVER_Back.Microsoft.AspNetCore.StaticWebAssets.props
-A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\staticwebassets\msbuild.NOVER_Back.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\staticwebassets\msbuild.build.NOVER_Back.props
-A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.NOVER_Back.props
-A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.NOVER_Back.props
-A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\staticwebassets.pack.json
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\NOVER_Back.csproj.Up2Date
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\NOVER_Back.dll
@@ -139,3 +133,4 @@ A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\zh-Hant\Microso
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\NOVER_Back.staticwebassets.runtime.json
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\TagLib.Audio.dll
+A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\staticwebassets.build.json.cache
