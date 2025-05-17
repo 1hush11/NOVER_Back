@@ -36,30 +36,6 @@ namespace NOVER_Back.Controllers
             return Ok(users);
         }
 
-        [HttpPost("user/block/{id}")]
-        public async Task<IActionResult> BlockUser(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-                return NotFound("Пользователь не найден.");
-
-            user.Status = "Заблокирован";
-            await _context.SaveChangesAsync();
-            return Ok("Пользователь заблокирован.");
-        }
-
-        [HttpPost("user/unblock/{id}")]
-        public async Task<IActionResult> UnblockUser(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-                return NotFound("Пользователь не найден.");
-
-            user.Status = "Активен";
-            await _context.SaveChangesAsync();
-            return Ok("Пользователь разблокирован.");
-        }
-
         [HttpGet("tracks/pending")]
         public async Task<IActionResult> GetPendingTracks()
         {
@@ -108,72 +84,38 @@ namespace NOVER_Back.Controllers
             return Ok("Трек отклонён и заблокирован.");
         }
 
-        [HttpGet("tracks")]
-        public async Task<IActionResult> GetAllTrackMetadata()
+        [HttpPost("singer/block/{id}")]
+        public async Task<IActionResult> BlockSinger(int id)
         {
-            var tracks = await _context.Tracks
-                .OrderBy(t => t.Id)
-                .Include(t => t.Album)
-                .Include(t => t.Genre)
-                .Include(t => t.Singers)
-                .Select(t => new
-                {
-                    t.Id,
-                    Name = t.Name,
-                    Singers = t.Singers.Select(s => s.Name).ToList(),
-                    AlbumId = t.AlbumId,
-                    AlbumName = t.Album != null ? t.Album.Name : null,
-                    GenreId = t.GenreId,
-                    GenreName = t.Genre != null ? t.Genre.Name : null,
-                    ReleaseDate = t.ReleaseDate,
-                    Duration = $"{t.Duration / 60:D2}:{t.Duration % 60:D2}",
-                    PlayCount = t.PlayCount,
-                    AudioUrl = t.AudioUrl,
-                    CoverUrl = t.CoverUrl,
-                    Status = t.Status
-                })
-                .ToListAsync();
+            var singer = await _context.Singers.FindAsync(id);
+            if (singer == null) return NotFound("Исполнитель не найден.");
 
-            return Ok(tracks);
+            singer.Status = "Заблокирован";
+            var tracks = await _context.Tracks.Where(t => t.Singers.Any(s => s.Id == id)).ToListAsync();
+            foreach (var t in tracks) 
+            { 
+                t.Status = "Заблокирован"; 
+            }
+            await _context.SaveChangesAsync();
+
+            return Ok("Исполнитель и его треки заблокированы.");
         }
 
-        [HttpPut("track/update/{id}")]
-        public async Task<IActionResult> UpdateTrackMetadata(int id, [FromBody] TrackDTO dto)
+        [HttpPost("singer/unblock/{id}")]
+        public async Task<IActionResult> UnblockSinger(int id)
         {
-            var track = await _context.Tracks
-                .Include(t => t.Singers)
-                .FirstOrDefaultAsync(t => t.Id == id);
+            var singer = await _context.Singers.FindAsync(id);
+            if (singer == null) return NotFound("Исполнитель не найден.");
 
-            if (track == null)
-                return NotFound("Трек не найден.");
-
-            track.Name = dto.Name;
-            track.ReleaseDate = dto.ReleaseDate;
-            track.Duration = dto.Duration;
-
-            if (!string.IsNullOrWhiteSpace(dto.AlbumTitle))
+            singer.Status = "Активен";
+            var tracks = await _context.Tracks.Where(t => t.Singers.Any(s => s.Id == id)).ToListAsync();
+            foreach (var t in tracks)
             {
-                var album = await _context.Albums.FirstOrDefaultAsync(a => a.Name == dto.AlbumTitle);
-                if (album != null) track.AlbumId = album.Id;
+                t.Status = "Активен";
             }
-
-            if (!string.IsNullOrWhiteSpace(dto.GenreName))
-            {
-                var genre = await _context.Genres.FirstOrDefaultAsync(g => g.Name == dto.GenreName);
-                if (genre != null) track.GenreId = genre.Id;
-            }
-
-            track.Singers.Clear();
-            foreach (var singerName in dto.Singers.Distinct())
-            {
-                var singer = await _context.Singers
-                    .FirstOrDefaultAsync(s => s.Name == singerName)
-                    ?? new Singer { Name = singerName };
-                track.Singers.Add(singer);
-            }
-
             await _context.SaveChangesAsync();
-            return Ok("Метаданные трека обновлены.");
+
+            return Ok("Исполнитель и его треки разблокированы.");
         }
 
         [HttpDelete("comment/{id}")]
@@ -234,20 +176,38 @@ namespace NOVER_Back.Controllers
         [HttpGet("complaints")]
         public async Task<IActionResult> GetComplaints()
         {
-            var complaints = await _context.Complaints.Include(c => c.User)
-            .Include(c => c.Track)
-            .Select(c => new
-            {
-                Id = c.Id,
-                UserId = c.UserId,
-                UserName = c.User != null ? c.User.Username : null,
-                TrackId = c.TrackId,
-                TrackName = c.Track != null ? c.Track.Name : null,
-                Content = c.Content,
-                CreatedAt = c.CreatedAt
-            }).ToListAsync();
+            var complaints = await _context.Complaints
+                .Include(c => c.User)
+                .Include(c => c.Track)
+                    .ThenInclude(t => t!.Singers)
+                .Select(c => new
+                {
+                    Id = c.Id,
+                    UserId = c.UserId,
+                    UserName = c.User!.Username,
+                    TrackId = c.TrackId,
+                    TrackName = c.Track!.Name,
+                    TrackStatus = c.Track.Status,
+                    // для кнопок блокировки исполнителя
+                    Singers = c.Track.Singers
+                        .Select(s => new {
+                            Id = s.Id,
+                            Status = s.Status
+                        })
+                        .ToList(),
+                    // чтобы на фронте выводить списком имена
+                    SingerNames = c.Track.Singers
+                        .Select(s => s.Name)
+                        .ToList(),
+                    Content = c.Content,
+                    CreatedAt = c.CreatedAt
+                })
+                .OrderBy(c => c.Id)
+                .ToListAsync();
+
             return Ok(complaints);
         }
+
 
         [HttpDelete("complaint/{id}")]
         public async Task<IActionResult> DeleteComplaint(int id)
@@ -260,6 +220,43 @@ namespace NOVER_Back.Controllers
             await _context.SaveChangesAsync();
             return Ok("Жалоба удалена.");
         }
+
+        [HttpGet("feedback")]
+        public async Task<IActionResult> GetAllFeedback()
+        {
+            var feedback = await _context.Ratings
+                .Include(r => r.User)
+                .Include(r => r.Track)
+                    .ThenInclude(t => t.Singers)
+                .GroupJoin(
+                    _context.Comments,
+                    r => new { r.TrackId, r.UserId },
+                    c => new { c.TrackId, c.UserId },
+                    (r, cs) => new { Rating = r, Comments = cs }
+                )
+                .SelectMany(
+                    rc => rc.Comments.DefaultIfEmpty(),
+                    (rc, c) => new
+                    {
+                        Id = c != null ? c.Id: 0,
+                        rc.Rating.TrackId,
+                        TrackName = rc.Rating.Track.Name,
+                        Singers = rc.Rating.Track.Singers.Select(s => s.Name).ToList(),
+                        rc.Rating.UserId,
+                        UserName = rc.Rating.User.Username,
+                        Rating = rc.Rating.Rating1,
+                        CommentId = c != null ? c.Id : (int?)null,
+                        CommentText = c != null ? c.CommentText : null,
+                        CommentCreatedAt = c != null ? c.CreatedAt : (DateTime?)null
+                    }
+                )
+                .OrderBy(f => f.TrackId)
+                .ThenBy(f => f.UserId)
+                .ToListAsync();
+
+            return Ok(feedback);
+        }
+
         [HttpGet("playlists_by_genre")]
         public async Task<IActionResult> GetPlaylistsByGenre()
         {

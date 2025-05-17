@@ -18,9 +18,11 @@ public partial class Singer
 
     public int? ViewCount { get; set; }
 
-    [JsonIgnore]
+    public string Status { get; set; } = null!;
+
     public virtual ICollection<Album> Albums { get; set; } = new List<Album>();
 
+    [JsonIgnore]
     public virtual ICollection<Track> Tracks { get; set; } = new List<Track>();
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();

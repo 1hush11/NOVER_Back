@@ -34,50 +34,6 @@ namespace NOVER_Back.Controllers
             return Ok(genre);
         }
 
-        [HttpPost("add_genre")]
-        public async Task<ActionResult<Genre>> AddGenre([FromBody] Genre genre)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            _context.Genres.Add(genre);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetGenreById), new { id = genre.Id }, genre);
-        }
-
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateGenre(int id, [FromBody] Genre updatedGenre)
-        {
-            if (id != updatedGenre.Id)
-                return BadRequest("ID жанра не совпадает.");
-
-            var existing = await _context.Genres.FindAsync(id);
-            if (existing == null)
-                return NotFound($"Жанр с ID {id} не найден.");
-
-            existing.Name = updatedGenre.Name;
-            existing.Description = updatedGenre.Description;
-            existing.CoverUrl = updatedGenre.CoverUrl;
-
-            await _context.SaveChangesAsync();
-
-            return Ok("Жанр обновлён.");
-        }
-
-        [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteGenre(int id)
-        {
-            var genre = await _context.Genres.FindAsync(id);
-
-            if (genre == null)
-                return NotFound($"Жанр с ID {id} не найден.");
-
-            _context.Genres.Remove(genre);
-            await _context.SaveChangesAsync();
-
-            return Ok("Жанр удалён.");
-        }
         [HttpGet("genres/{id}/tracks")]
         public async Task<ActionResult<IEnumerable<TrackDTO>>> GetTracksByGenre(int id, [FromQuery] int count = 5)
         {

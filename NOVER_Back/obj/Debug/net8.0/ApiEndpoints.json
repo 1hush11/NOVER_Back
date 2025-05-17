@@ -43,6 +43,16 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.AdminController",
+    "Method": "GetAllFeedback",
+    "RelativePath": "api/admin/feedback",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.AdminController",
     "Method": "AddGenre",
     "RelativePath": "api/admin/genre/add",
     "HttpMethod": "POST",
@@ -106,6 +116,38 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.AdminController",
+    "Method": "BlockSinger",
+    "RelativePath": "api/admin/singer/block/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.AdminController",
+    "Method": "UnblockSinger",
+    "RelativePath": "api/admin/singer/unblock/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.AdminController",
     "Method": "ApproveTrack",
     "RelativePath": "api/admin/track/approve/{id}",
     "HttpMethod": "POST",
@@ -138,37 +180,6 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.AdminController",
-    "Method": "UpdateTrackMetadata",
-    "RelativePath": "api/admin/track/update/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "dto",
-        "Type": "NOVER_Back.Models.DTOs.TrackDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.AdminController",
-    "Method": "GetAllTrackMetadata",
-    "RelativePath": "api/admin/tracks",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.AdminController",
     "Method": "GetPendingTracks",
     "RelativePath": "api/admin/tracks/pending",
     "HttpMethod": "GET",
@@ -189,38 +200,6 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.AdminController",
-    "Method": "BlockUser",
-    "RelativePath": "api/admin/user/block/{id}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.AdminController",
-    "Method": "UnblockUser",
-    "RelativePath": "api/admin/user/unblock/{id}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.AdminController",
     "Method": "GetAllUsers",
     "RelativePath": "api/admin/users",
     "HttpMethod": "GET",
@@ -228,48 +207,6 @@
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.AlbumController",
-    "Method": "DeleteAlbum",
-    "RelativePath": "api/album/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.AlbumController",
-    "Method": "AddAlbum",
-    "RelativePath": "api/album/add_album",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "albumDto",
-        "Type": "NOVER_Back.Models.DTOs.AlbumWithTrackDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "NOVER_Back.Models.DTOs.AlbumWithTrackDTO",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
   },
   {
     "ContainingType": "NOVER_Back.Controllers.AlbumController",
@@ -316,48 +253,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.GenreController",
-    "Method": "AddGenre",
-    "RelativePath": "api/genre/add_genre",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "genre",
-        "Type": "NOVER_Back.Models.Genre",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "NOVER_Back.Models.Genre",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.GenreController",
-    "Method": "DeleteGenre",
-    "RelativePath": "api/genre/delete/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "NOVER_Back.Controllers.GenreController",
@@ -466,27 +361,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.GenreController",
-    "Method": "UpdateGenre",
-    "RelativePath": "api/genre/update/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "updatedGenre",
-        "Type": "NOVER_Back.Models.Genre",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "NOVER_Back.Controllers.PlaylistController",
@@ -683,98 +557,6 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.ReviewController",
-    "Method": "GenerateGenrePlaylists",
-    "RelativePath": "api/review/generate_genre_playlists",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.ReviewController",
-    "Method": "GetPlaylistsByGenre",
-    "RelativePath": "api/review/playlists_by_genre",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.ReviewController",
-    "Method": "GetAllReviews",
-    "RelativePath": "api/review/reviews",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.ReviewController",
-    "Method": "GetTopRatedTracks",
-    "RelativePath": "api/review/top",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.ReviewController",
-    "Method": "GetTopRatedTracksByGenre",
-    "RelativePath": "api/review/top_by_genre",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.ReviewController",
-    "Method": "GetReviewsByTrack",
-    "RelativePath": "api/review/track/{trackId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "trackId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.ReviewController",
-    "Method": "UpdateGenrePlaylists",
-    "RelativePath": "api/review/update_genre_playlists",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.SearchController",
-    "Method": "Search",
-    "RelativePath": "api/search",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "q",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
     "ReturnTypes": []
   },
   {
@@ -1044,22 +826,6 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.TrackController",
-    "Method": "DeleteTrack",
-    "RelativePath": "api/track/delete/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.TrackController",
     "Method": "SearchTracks",
     "RelativePath": "api/track/search",
     "HttpMethod": "GET",
@@ -1202,27 +968,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.TrackController",
-    "Method": "UpdateTrack",
-    "RelativePath": "api/track/update/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "dto",
-        "Type": "NOVER_Back.Models.DTOs.TrackDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "NOVER_Back.Controllers.UserController",

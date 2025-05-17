@@ -216,40 +216,6 @@ namespace NOVER_Back.Controllers
             return Ok(new { track.Id, track.PlayCount });
         }
 
-        [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteTrack(int id)
-        {
-            var track = await _context.Tracks.FindAsync(id);
-            if (track == null)
-                return NotFound("Трек не найден.");
-
-            _context.Tracks.Remove(track);
-            await _context.SaveChangesAsync();
-
-            return Ok("Трек удалён.");
-        }
-
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateTrack(int id, [FromBody] TrackDTO dto)
-        {
-            var track = await _context.Tracks.FindAsync(id);
-            if (track == null)
-                return NotFound("Трек не найден.");
-
-            track.Name = dto.Name;
-            track.AlbumId = dto.AlbumId;
-            track.Duration = dto.Duration;
-            track.GenreId = dto.GenreId;
-            track.ReleaseDate = dto.ReleaseDate;
-            track.PlayCount = dto.PlayCount;
-            track.AudioUrl = dto.AudioUrl;
-            track.CoverUrl = dto.CoverUrl;
-            track.Status = dto.Status;
-
-            await _context.SaveChangesAsync();
-            return Ok("Трек обновлён.");
-        }
-
         [HttpGet("by_singer/{singerId}")]
         public async Task<ActionResult<IEnumerable<TrackDTO>>> GetTracksBySinger(int singerId)
         {

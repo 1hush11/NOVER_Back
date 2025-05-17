@@ -36,7 +36,7 @@ public partial class DbNoverContext : DbContext
     public virtual DbSet<UserPlaylist> UserPlaylists { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=db_nover;Username=postgres;Password=1234");
+        => optionsBuilder.UseNpgsql("Server=localhost;Database=db_nover;User Id=postgres;Password=1234");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -203,6 +203,10 @@ public partial class DbNoverContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("name");
             entity.Property(e => e.PhotoUrl).HasColumnName("photo_url");
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .HasDefaultValueSql("'Активен'::character varying")
+                .HasColumnName("status");
             entity.Property(e => e.SubscribersCount)
                 .HasDefaultValue(0)
                 .HasColumnName("subscribers_count");
