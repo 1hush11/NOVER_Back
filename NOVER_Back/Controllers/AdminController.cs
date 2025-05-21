@@ -149,26 +149,27 @@ namespace NOVER_Back.Controllers
         [HttpPut("genre/update/{id}")]
         public async Task<IActionResult> UpdateGenre(int id, [FromBody] Genre genre)
         {
-            var existing = await _context.Genres.FindAsync(id);
+            var existingGenre = await _context.Genres.FindAsync(id);
             
-            if (existing == null) return NotFound("Жанр не найден.");
-            
-            existing.Name = genre.Name;
-            existing.Description = genre.Description;
-            existing.CoverUrl = genre.CoverUrl;
+            if (existingGenre == null) return NotFound("Жанр не найден.");
+
+            existingGenre.Name = genre.Name;
+            existingGenre.Description = genre.Description;
+            existingGenre.CoverUrl = genre.CoverUrl;
             
             await _context.SaveChangesAsync();
             return Ok("Жанр обновлён.");
         }
 
-        [HttpDelete("genre/delete/{id}")]
+        [HttpPut("genre/delete/{id}")]
         public async Task<IActionResult> DeleteGenre(int id)
         {
-            var genre = await _context.Genres.FindAsync(id);
-           
-            if (genre == null) return NotFound("Жанр не найден.");
+            var existingGenre = await _context.Genres.FindAsync(id);
             
-            _context.Genres.Remove(genre);
+            if (existingGenre == null) return NotFound("Жанр не найден.");
+
+            existingGenre.Status = "Заблокирован";
+
             await _context.SaveChangesAsync();
             return Ok("Жанр удалён.");
         }

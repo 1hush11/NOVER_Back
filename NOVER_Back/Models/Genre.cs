@@ -13,5 +13,7 @@ public partial class Genre
 
     public string? CoverUrl { get; set; }
 
+    public string? Status { get; set; }
+
     public virtual ICollection<Track> Tracks { get; set; } = new List<Track>();
 }

@@ -19,14 +19,14 @@ namespace NOVER_Back.Controllers
         [HttpGet("tracks")]
         public async Task<ActionResult<IEnumerable<TrackDTO>>> GetTracks()
         {
-            var tracks = await _context.Tracks
+            var tracks = await _context.Tracks.Where(t => t.Status == "Активен")
                 .OrderBy(t => t.Id)
                 .Include(t => t.Album)
                 .Include(t => t.Genre)
                 .Include(t => t.Singers)
                 .ToListAsync();
 
-            var result = tracks.Where(t => t.Status == "Активен").Select(t => new TrackDTO
+            var result = tracks.Select(t => new TrackDTO
             {
                 Id = t.Id,
                 Name = t.Name,
@@ -50,6 +50,7 @@ namespace NOVER_Back.Controllers
         public async Task<ActionResult<TrackDTO>> GetTrackById([FromRoute] int id)
         {
             var track = await _context.Tracks
+                .Where(t => t.Status == "Активен")
                 .OrderBy(t => t.Id)
                 .Include(t => t.Album)
                 .Include(t => t.Genre)
@@ -88,6 +89,7 @@ namespace NOVER_Back.Controllers
             }
 
             var topTracks = await _context.Tracks
+                .Where(t => t.Status == "Активен")
                 .OrderByDescending(t => t.PlayCount)
                 .Include(t => t.Singers)
                 .Include(t => t.Album)
@@ -100,7 +102,7 @@ namespace NOVER_Back.Controllers
                 return NotFound($"Не найдено ни одного из топ {count} треков.");
             }
 
-            var dto = topTracks.Where(t => t.Status == "Активен").Select(t => new TrackDTO
+            var dto = topTracks.Select(t => new TrackDTO
             {
                 Id = t.Id,
                 Name = t.Name,
@@ -118,37 +120,6 @@ namespace NOVER_Back.Controllers
             }).ToList();
 
             return Ok(dto);
-        }
-
-        [HttpPost("add_track")]
-        public async Task<ActionResult<Track>> AddTrack([FromBody] TrackDTO track)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            if (track.AlbumId.HasValue && !await _context.Albums.AnyAsync(a => a.Id == track.AlbumId))
-                return BadRequest($"Альбом с ID {track.AlbumId} не найден.");
-
-            if (track.GenreId.HasValue && !await _context.Genres.AnyAsync(g => g.Id == track.GenreId))
-                return BadRequest($"Жанр с ID {track.GenreId} не найден.");
-
-            var newTrack = new Track
-            {
-                Name = track.Name,
-                AlbumId = track.AlbumId,
-                Duration = track.Duration,
-                GenreId = track.GenreId,
-                ReleaseDate = track.ReleaseDate,
-                PlayCount = track.PlayCount ?? 0,
-                AudioUrl = track.AudioUrl,
-                CoverUrl = track.CoverUrl,
-                Status = track.Status
-            };
-
-            await _context.Tracks.AddAsync(newTrack);
-            await _context.SaveChangesAsync();
-
-            return Ok(newTrack);
         }
 
         [HttpPost("set_current/{id}")]
@@ -231,7 +202,7 @@ namespace NOVER_Back.Controllers
             if (singer == null)
                 return NotFound("Исполнитель не найден.");
 
-            var result = singer.Tracks.Select(t => new TrackDTO
+            var result = singer.Tracks.Where(t => t.Status == "Активен").Select(t => new TrackDTO
             {
                 Id = t.Id,
                 Name = t.Name,
@@ -260,6 +231,7 @@ namespace NOVER_Back.Controllers
             }
 
             var track = await _context.Tracks
+                .Where(t => t.Status == "Активен")
                 .Include(t => t.Genre)
                 .FirstOrDefaultAsync(t => t.Id == id);
 
@@ -269,46 +241,13 @@ namespace NOVER_Back.Controllers
             }
 
             var similarTracks = await _context.Tracks
-                .Where(t => t.GenreId == track.GenreId && t.Id != id)
+                .Where(t => t.GenreId == track.GenreId && t.Id != id && t.Status == "Активен")
                 .Include(t => t.Genre)
                 .Include(t => t.Singers)
                 .Take(count)
                 .ToListAsync();
 
             var result = similarTracks.Select(t => new TrackDTO
-            {
-                Id = t.Id,
-                Name = t.Name,
-                AlbumId = t.AlbumId,
-                AlbumTitle = t.Album?.Name,
-                Duration = t.Duration,
-                GenreId = t.GenreId,
-                GenreName = t.Genre?.Name,
-                ReleaseDate = t.ReleaseDate,
-                PlayCount = t.PlayCount,
-                AudioUrl = t.AudioUrl,
-                CoverUrl = t.CoverUrl,
-                Status = t.Status,
-                Singers = t.Singers.Select(s => s.Name).ToList()
-            }).ToList();
-
-            return Ok(result);
-        }
-
-        [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<TrackDTO>>> SearchTracks([FromQuery] string query)
-        {
-            if (string.IsNullOrWhiteSpace(query))
-                return BadRequest("Пустой запрос.");
-
-            var tracks = await _context.Tracks
-                .Where(t => EF.Functions.ILike(t.Name, $"%{query}%"))
-                .Include(t => t.Album)
-                .Include(t => t.Genre)
-                .Include(t => t.Singers)
-                .ToListAsync();
-
-            var result = tracks.Select(t => new TrackDTO
             {
                 Id = t.Id,
                 Name = t.Name,

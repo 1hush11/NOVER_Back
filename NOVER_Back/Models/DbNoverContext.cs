@@ -36,7 +36,7 @@ public partial class DbNoverContext : DbContext
     public virtual DbSet<UserPlaylist> UserPlaylists { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Server=localhost;Database=db_nover;User Id=postgres;Password=1234");
+        => optionsBuilder.UseNpgsql("Host=localhost;Database=db_nover;Username=postgres;Password=1234");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -72,6 +72,10 @@ public partial class DbNoverContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_at");
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .HasDefaultValueSql("'Активен'::character varying")
+                .HasColumnName("status");
             entity.Property(e => e.TrackId).HasColumnName("track_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
@@ -96,6 +100,10 @@ public partial class DbNoverContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_at");
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .HasDefaultValueSql("'На рассмотрении'::character varying")
+                .HasColumnName("status");
             entity.Property(e => e.TrackId).HasColumnName("track_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
@@ -124,6 +132,10 @@ public partial class DbNoverContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .HasDefaultValueSql("'Активен'::character varying")
+                .HasColumnName("status");
         });
 
         modelBuilder.Entity<Playlist>(entity =>

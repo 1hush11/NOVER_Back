@@ -19,7 +19,7 @@ namespace NOVER_Back.Controllers
         [HttpGet("genres")]
         public async Task<ActionResult<IEnumerable<Genre>>> GetGenres()
         {
-            var genres = await _context.Genres.OrderBy(g => g.Id).ToListAsync();
+            var genres = await _context.Genres.Where(g => g.Status == "Активен").OrderBy(g => g.Id).ToListAsync();
             return Ok(genres);
         }
 
@@ -38,6 +38,7 @@ namespace NOVER_Back.Controllers
         public async Task<ActionResult<IEnumerable<TrackDTO>>> GetTracksByGenre(int id, [FromQuery] int count = 5)
         {
             var genre = await _context.Genres
+                .Where(g => g.Status == "Активен")
                 .Include(g => g.Tracks)
                 .ThenInclude(t => t.Singers)
                 .FirstOrDefaultAsync(g => g.Id == id);
@@ -46,6 +47,7 @@ namespace NOVER_Back.Controllers
                 return NotFound($"Жанр с ID {id} не найден.");
 
             var result = genre.Tracks
+                .Where(t => t.Status == "Активен")
                 .OrderByDescending(t => t.PlayCount)
                 .Take(count)
                 .Select(t => new TrackDTO
@@ -77,11 +79,12 @@ namespace NOVER_Back.Controllers
                 return NotFound($"Жанр с ID {id} не найден.");
 
             var tracks = await _context.Tracks
-                .Where(t => t.GenreId == id)
+                .Where(t => t.GenreId == id && t.Status == "Активен")
                 .Include(t => t.Singers)
                 .ToListAsync();
 
             var singers = tracks
+                .Where(s => s.Status == "Активен")
                 .SelectMany(t => t.Singers)
                 .Distinct()
                 .Take(count)

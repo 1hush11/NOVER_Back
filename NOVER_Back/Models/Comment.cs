@@ -15,6 +15,8 @@ public partial class Comment
 
     public DateTime? CreatedAt { get; set; }
 
+    public string? Status { get; set; }
+
     public virtual Track Track { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;

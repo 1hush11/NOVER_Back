@@ -20,6 +20,7 @@ namespace NOVER_Back.Controllers
         public async Task<ActionResult<IEnumerable<object>>> GetSingers()
         {
             var singers = await _context.Singers
+                .Where(s => s.Status == "Активен")
                 .OrderBy(s => s.Id)
                 .Include(s => s.Tracks)
                 .ToListAsync();
@@ -43,6 +44,7 @@ namespace NOVER_Back.Controllers
         public async Task<ActionResult<object>> GetSingerWithTracks(int id)
         {
             var singer = await _context.Singers
+                .Where(s => s.Status == "Активен")
                 .Include(s => s.Tracks)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
@@ -137,6 +139,7 @@ namespace NOVER_Back.Controllers
         public async Task<ActionResult<IEnumerable<SingerDTO>>> GetTopSingers([FromQuery] int count = 10)
         {
             var topSingers = await _context.Singers
+                .Where(s => s.Status == "Активен")
                 .OrderByDescending(s => s.SubscribersCount)
                 .Take(count)
                 .ToListAsync();
@@ -168,6 +171,7 @@ namespace NOVER_Back.Controllers
         public async Task<ActionResult<IEnumerable<TrackDTO>>> GetTopTracksBySinger(int id, [FromQuery] int count = 10)
         {
             var singer = await _context.Singers
+                .Where(s => s.Status == "Активен")
                 .Include(s => s.Tracks)
                     .ThenInclude(t => t.Singers)
                 .FirstOrDefaultAsync(s => s.Id == id);
@@ -201,6 +205,7 @@ namespace NOVER_Back.Controllers
         public async Task<ActionResult<IEnumerable<object>>> GetSimilarSingers(int id)
         {
             var singer = await _context.Singers
+                .Where(s => s.Status == "Активен")   
                 .Include(s => s.Tracks)
                 .ThenInclude(t => t.Genre)
                 .FirstOrDefaultAsync(s => s.Id == id);

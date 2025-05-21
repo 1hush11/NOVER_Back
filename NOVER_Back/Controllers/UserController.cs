@@ -907,6 +907,63 @@ namespace NOVER_Back.Controllers
             return Ok(new { message = "Отзыв обновлён." });
         }
 
+        [HttpPost("block_review")]
+        public async Task<IActionResult> BlockReview([FromBody] ReviewDTO review)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var track = await _context.Tracks.FindAsync(review.TrackId);
+            if (track == null)
+                return NotFound("Трек не найден.");
+
+            var existingRating = await _context.Ratings
+                .FirstOrDefaultAsync(r => r.UserId == userId && r.TrackId == review.TrackId);
+
+            if (existingRating != null)
+            {
+                return BadRequest("Вы уже оценили этот трек.");
+            }
+
+            _context.Ratings.Add(new Rating
+            {
+                UserId = userId.Value,
+                TrackId = review.TrackId,
+                Rating1 = review.Rating
+            });
+
+            if (!string.IsNullOrWhiteSpace(review.Comment))
+            {
+                var existingComment = await _context.Comments
+                    .Where(c => c.UserId == userId && c.TrackId == review.TrackId)
+                    .OrderByDescending(c => c.CreatedAt)
+                    .FirstOrDefaultAsync();
+
+                if (existingComment != null)
+                {
+                    existingComment.CommentText = review.Comment;
+                    existingComment.Status = "Заблокирован";
+                    existingComment.CreatedAt = DateTime.UtcNow.ToLocalTime();
+                }
+                else
+                {
+                    _context.Comments.Add(new Comment
+                    {
+                        UserId = userId.Value,
+                        TrackId = review.TrackId,
+                        CommentText = review.Comment,
+                        CreatedAt = DateTime.UtcNow.ToLocalTime(),
+                        Status = "Заблокирован"
+                    });
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok("Отзыв отправлен на модерацию.");
+        }
+
+
         private int? GetCurrentUserId()
         {
             if (!Request.Cookies.TryGetValue("userId", out var userIdStr) ||

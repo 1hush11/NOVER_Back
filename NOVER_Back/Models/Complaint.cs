@@ -15,6 +15,8 @@ public partial class Complaint
 
     public DateTime? CreatedAt { get; set; }
 
+    public string? Status { get; set; }
+
     public virtual Track? Track { get; set; }
 
     public virtual User? User { get; set; }
