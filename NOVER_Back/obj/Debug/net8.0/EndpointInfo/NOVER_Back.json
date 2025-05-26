@@ -17,6 +17,52 @@
         }
       }
     },
+    "/api/admin/user/block/{id}": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/user/unblock/{id}": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/admin/tracks/pending": {
       "get": {
         "tags": [
@@ -121,8 +167,31 @@
         }
       }
     },
-    "/api/admin/comment/{id}": {
-      "delete": {
+    "/api/admin/comment/block/{id}": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/comment/unblock/{id}": {
+      "put": {
         "tags": [
           "Admin"
         ],
@@ -217,7 +286,7 @@
         }
       }
     },
-    "/api/admin/genre/delete/{id}": {
+    "/api/admin/genre/block/{id}": {
       "put": {
         "tags": [
           "Admin"
@@ -252,8 +321,8 @@
         }
       }
     },
-    "/api/admin/complaint/{id}": {
-      "delete": {
+    "/api/admin/complaint/block/{id}": {
+      "put": {
         "tags": [
           "Admin"
         ],
@@ -275,7 +344,53 @@
         }
       }
     },
-    "/api/admin/feedback": {
+    "/api/admin/complaint/unblock/{id}": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/complaint/approve/{id}": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/blocked_feedback": {
       "get": {
         "tags": [
           "Admin"

@@ -42,6 +42,10 @@ namespace NOVER_Back.Controllers
 
             if (album == null)
                 return NotFound($"Альбом с ID {id} не найден.");
+            
+            album.Tracks = album.Tracks
+                .Where(t => t.Status == "Активен")
+                .ToList();
 
             var result = MapToDTO(album);
             return Ok(result);

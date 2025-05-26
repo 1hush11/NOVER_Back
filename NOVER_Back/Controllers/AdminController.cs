@@ -11,10 +11,12 @@ namespace NOVER_Back.Controllers
     public class AdminController : ControllerBase
     {
         private readonly DbNoverContext _context;
+        private readonly IEmailService _emailService;
 
-        public AdminController(DbNoverContext context)
+        public AdminController(DbNoverContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         [HttpGet("users")]
@@ -35,6 +37,45 @@ namespace NOVER_Back.Controllers
 
             return Ok(users);
         }
+
+        [HttpPut("user/block/{id}")]
+        public async Task<IActionResult> BlockUser(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null) return NotFound("Комментарий не найден.");
+
+            user.Status = "Заблокирован";
+
+            await _context.SaveChangesAsync();
+
+            if (!string.IsNullOrWhiteSpace(user.Login))
+            {
+                var subject = "Ваш аккаунт был заблокирован";
+                var body = $@"
+                <p>Здравствуйте, {user.Username}!</p>
+                <p>Ваш аккаунт на платформе NOVER был заблокирован администратором.</p>
+                <p>Если вы считаете, что это ошибка, пожалуйста, свяжитесь с поддержкой.</p>
+                <p>С уважением,<br/>Команда NOVER</p>";
+                await _emailService.SendEmailAsync(user.Login, subject, body);
+            }
+
+            return Ok("Пользователь заблокирован.");
+        }
+
+        [HttpPut("user/unblock/{id}")]
+        public async Task<IActionResult> UnblockUser(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null) return NotFound("Комментарий не найден.");
+
+            user.Status = "Активен";
+
+            await _context.SaveChangesAsync();
+            return Ok("Пользователя разблокировали.");
+        }
+
 
         [HttpGet("tracks/pending")]
         public async Task<IActionResult> GetPendingTracks()
@@ -70,7 +111,6 @@ namespace NOVER_Back.Controllers
 
             return Ok("Трек одобрен");
         }
-
         [HttpPost("track/reject/{id}")]
         public async Task<IActionResult> RejectTrack(int id)
         {
@@ -100,7 +140,6 @@ namespace NOVER_Back.Controllers
 
             return Ok("Исполнитель и его треки заблокированы.");
         }
-
         [HttpPost("singer/unblock/{id}")]
         public async Task<IActionResult> UnblockSinger(int id)
         {
@@ -118,14 +157,27 @@ namespace NOVER_Back.Controllers
             return Ok("Исполнитель и его треки разблокированы.");
         }
 
-        [HttpDelete("comment/{id}")]
-        public async Task<IActionResult> DeleteComment(int id)
+        [HttpPut("comment/block/{id}")]
+        public async Task<IActionResult> BlockComment(int id)
         {
             var comment = await _context.Comments.FindAsync(id);
             
             if (comment == null) return NotFound("Комментарий не найден.");
-            
-            _context.Comments.Remove(comment);
+
+            comment.Status = "Заблокирован";
+
+            await _context.SaveChangesAsync();
+            return Ok("Комментарий удалён.");
+        }
+        [HttpPut("comment/unblock/{id}")]
+        public async Task<IActionResult> UblockComment(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+
+            if (comment == null) return NotFound("Комментарий не найден.");
+
+            comment.Status = "Активен";
+
             await _context.SaveChangesAsync();
             return Ok("Комментарий удалён.");
         }
@@ -161,8 +213,8 @@ namespace NOVER_Back.Controllers
             return Ok("Жанр обновлён.");
         }
 
-        [HttpPut("genre/delete/{id}")]
-        public async Task<IActionResult> DeleteGenre(int id)
+        [HttpPut("genre/block/{id}")]
+        public async Task<IActionResult> BlockGenre(int id)
         {
             var existingGenre = await _context.Genres.FindAsync(id);
             
@@ -178,6 +230,7 @@ namespace NOVER_Back.Controllers
         public async Task<IActionResult> GetComplaints()
         {
             var complaints = await _context.Complaints
+                .OrderBy(c => c.Id)
                 .Include(c => c.User)
                 .Include(c => c.Track)
                     .ThenInclude(t => t!.Singers)
@@ -189,14 +242,12 @@ namespace NOVER_Back.Controllers
                     TrackId = c.TrackId,
                     TrackName = c.Track!.Name,
                     TrackStatus = c.Track.Status,
-                    // для кнопок блокировки исполнителя
                     Singers = c.Track.Singers
                         .Select(s => new {
                             Id = s.Id,
                             Status = s.Status
                         })
                         .ToList(),
-                    // чтобы на фронте выводить списком имена
                     SingerNames = c.Track.Singers
                         .Select(s => s.Name)
                         .ToList(),
@@ -209,50 +260,72 @@ namespace NOVER_Back.Controllers
             return Ok(complaints);
         }
 
-
-        [HttpDelete("complaint/{id}")]
-        public async Task<IActionResult> DeleteComplaint(int id)
+        [HttpPut("complaint/block/{id}")]
+        public async Task<IActionResult> BlockComplaint(int id)
         {
             var complaint = await _context.Complaints.FindAsync(id);
-            
+
             if (complaint == null) return NotFound("Жалоба не найдена.");
-            
-            _context.Complaints.Remove(complaint);
+
+            complaint.Status = "Отклонена";
             await _context.SaveChangesAsync();
-            return Ok("Жалоба удалена.");
+            return Ok("Жалоба заблокирована.");
+        }
+        [HttpPut("complaint/unblock/{id}")]
+        public async Task<IActionResult> UnblockComplaint(int id)
+        {
+            var complaint = await _context.Complaints.FindAsync(id);
+
+            if (complaint == null) return NotFound("Жалоба не найдена.");
+
+            complaint.Status = "На рассмотрении";
+            await _context.SaveChangesAsync();
+            return Ok("Жалоба заблокирована.");
+        }
+        [HttpPut("complaint/approve/{id}")]
+        public async Task<IActionResult> ApproveComplaint(int id)
+        {
+            var complaint = await _context.Complaints.FindAsync(id);
+
+            if (complaint == null) return NotFound("Жалоба не найдена.");
+
+            complaint.Status = "Рассмотрено";
+            await _context.SaveChangesAsync();
+            return Ok("Жалоба заблокирована.");
         }
 
-        [HttpGet("feedback")]
-        public async Task<IActionResult> GetAllFeedback()
+        [HttpGet("blocked_feedback")]
+        public async Task<IActionResult> GetBlockedFeedback()
         {
             var feedback = await _context.Ratings
+                .OrderBy(r => r.UserId)
                 .Include(r => r.User)
                 .Include(r => r.Track)
                     .ThenInclude(t => t.Singers)
-                .GroupJoin(
-                    _context.Comments,
+                .Join(
+                    _context.Comments.Where(c => c.Status == "Заблокирован"),
                     r => new { r.TrackId, r.UserId },
                     c => new { c.TrackId, c.UserId },
-                    (r, cs) => new { Rating = r, Comments = cs }
-                )
-                .SelectMany(
-                    rc => rc.Comments.DefaultIfEmpty(),
-                    (rc, c) => new
+                    (r, c) => new
                     {
-                        Id = c != null ? c.Id: 0,
-                        rc.Rating.TrackId,
-                        TrackName = rc.Rating.Track.Name,
-                        Singers = rc.Rating.Track.Singers.Select(s => s.Name).ToList(),
-                        rc.Rating.UserId,
-                        UserName = rc.Rating.User.Username,
-                        Rating = rc.Rating.Rating1,
-                        CommentId = c != null ? c.Id : (int?)null,
-                        CommentText = c != null ? c.CommentText : null,
-                        CommentCreatedAt = c != null ? c.CreatedAt : (DateTime?)null
+                        CommentId = c.Id,
+                        TrackId = r.TrackId,
+                        TrackName = r.Track.Name,
+                        Singers = r.Track.Singers.Select(s => s.Name).ToList(),
+                        UserId = r.UserId,
+                        UserName = r.User.Username,
+                        UserLogin = r.User.Login,
+                        UserStatus = r.User.Status,
+                        RatingValue = r.Rating1,
+                        CommentText = c.CommentText,
+                        CommentCreatedAt = c.CreatedAt,
+                        TotalBlockedCommentsByUser = _context.Comments
+                                              .Count(cc => cc.UserId == r.UserId
+                                                         && cc.Status == "Заблокирован")
                     }
                 )
-                .OrderBy(f => f.TrackId)
-                .ThenBy(f => f.UserId)
+                .OrderBy(x => x.TrackId)
+                .ThenBy(x => x.UserId)
                 .ToListAsync();
 
             return Ok(feedback);

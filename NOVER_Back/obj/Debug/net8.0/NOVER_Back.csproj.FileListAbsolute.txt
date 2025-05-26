@@ -134,3 +134,8 @@ A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\runtimes\browse
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\NOVER_Back.staticwebassets.runtime.json
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\TagLib.Audio.dll
 A:\Visual Studio Projects\NOVER_Back\NOVER_Back\obj\Debug\net8.0\staticwebassets.build.json.cache
+A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\MailKit.dll
+A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\MimeKit.dll
+A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
+A:\Visual Studio Projects\NOVER_Back\NOVER_Back\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
