@@ -76,7 +76,6 @@ namespace NOVER_Back.Controllers
             return Ok("Пользователя разблокировали.");
         }
 
-
         [HttpGet("tracks/pending")]
         public async Task<IActionResult> GetPendingTracks()
         {
@@ -230,7 +229,7 @@ namespace NOVER_Back.Controllers
         public async Task<IActionResult> GetComplaints()
         {
             var complaints = await _context.Complaints
-                .OrderBy(c => c.Id)
+                .OrderByDescending(c => c.CreatedAt)
                 .Include(c => c.User)
                 .Include(c => c.Track)
                     .ThenInclude(t => t!.Singers)
@@ -324,8 +323,7 @@ namespace NOVER_Back.Controllers
                                                          && cc.Status == "Заблокирован")
                     }
                 )
-                .OrderBy(x => x.TrackId)
-                .ThenBy(x => x.UserId)
+                .OrderByDescending(r => r.CommentCreatedAt)
                 .ToListAsync();
 
             return Ok(feedback);

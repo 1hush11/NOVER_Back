@@ -185,20 +185,26 @@ namespace NOVER_Back.Controllers
             if (user == null)
                 return NotFound("Пользователь не найден.");
 
-            var trackDTOs = user.Tracks.Select(t => new TrackDTO
-            {
-                Id = t.Id,
-                Name = t.Name,
-                AlbumId = t.AlbumId,
-                Duration = t.Duration,
-                GenreId = t.GenreId,
-                ReleaseDate = t.ReleaseDate,
-                PlayCount = t.PlayCount,
-                AudioUrl = t.AudioUrl,
-                CoverUrl = t.CoverUrl,
-                Status = t.Status,
-                Singers = t.Singers.Select(s => s.Name).ToList()
-            }).ToList();
+            var trackDTOs = user.Tracks
+                .Where(t => t.Status == "Активен" && t.Singers.All(s => s.Status == "Активен"))
+                .Select(t => new TrackDTO
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    AlbumId = t.AlbumId,
+                    Duration = t.Duration,
+                    GenreId = t.GenreId,
+                    ReleaseDate = t.ReleaseDate,
+                    PlayCount = t.PlayCount,
+                    AudioUrl = t.AudioUrl,
+                    CoverUrl = t.CoverUrl,
+                    Status = t.Status,
+                    Singers = t.Singers
+                        .Where(s => s.Status == "Активен")
+                        .Select(s => s.Name)
+                        .ToList()
+                })
+                .ToList();
 
             return Ok(trackDTOs);
         }
@@ -724,7 +730,8 @@ namespace NOVER_Back.Controllers
 
             var user = await _context.Users
                 .Include(u => u.Singers)
-                .ThenInclude(s => s.Albums)
+                    .ThenInclude(s => s.Albums)
+                        .ThenInclude(a => a.Tracks)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
@@ -734,7 +741,11 @@ namespace NOVER_Back.Controllers
 
             var albums = user.Singers
                 .SelectMany(s => s.Albums)
-                .Where(a => a.ReleaseDate != null && a.ReleaseDate >= cutoffDate)
+                .Where(a =>
+                    a.ReleaseDate != null && a.ReleaseDate >= cutoffDate &&
+                    a.Tracks.Any(t => t.Status == "Активен") &&
+                    a.Singer!.Status == "Активен"
+                )
                 .OrderByDescending(a => a.ReleaseDate)
                 .Take(15)
                 .Select(album => new
@@ -792,7 +803,13 @@ namespace NOVER_Back.Controllers
 
             var tracks = user.Singers
                 .SelectMany(s => s.Tracks)
-                .Where(t => t.ReleaseDate != null && t.ReleaseDate >= cutoffDate)
+                .Where(t =>
+                    t.ReleaseDate != null &&
+                    t.ReleaseDate >= cutoffDate &&
+                    t.Status == "Активен" &&
+                    t.Singers.All(s => s.Status == "Активен") &&
+                    (t.Genre == null || t.Genre.Status == "Активен")
+                )
                 .OrderByDescending(t => t.PlayCount ?? 0)
                 .Distinct()
                 .Take(50)

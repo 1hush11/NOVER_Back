@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NOVER_Back.Models;
+using NOVER_Back.Models.DTOs;
 
 namespace NOVER_Back.Controllers
 {
@@ -67,7 +68,15 @@ namespace NOVER_Back.Controllers
                     Name = a.Name,
                     CoverUrl = a.CoverUrl,
                     ReleaseDate = a.ReleaseDate,
-                    Singer = a.Singer,
+                    Singer = a.Singer == null ? null : new SingerDTO
+                    {
+                        Id = a.Singer.Id,
+                        Name = a.Singer.Name,
+                        PhotoUrl = a.Singer.PhotoUrl,
+                        Description = a.Singer.Description,
+                        ViewCount = a.Singer.ViewCount,
+                        SubscribersCount = a.Singer.SubscribersCount
+                    },
                     SingerCover = a.Singer!.PhotoUrl,
                     Type = "album"
                 }).ToListAsync();

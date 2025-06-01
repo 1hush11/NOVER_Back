@@ -2784,13 +2784,6 @@
             "type": "string",
             "nullable": true
           },
-          "albums": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Album"
-            },
-            "nullable": true
-          },
           "users": {
             "type": "array",
             "items": {

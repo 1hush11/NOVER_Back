@@ -33,8 +33,8 @@ namespace NOVER_Back.Controllers
                 Description = s.Description,
                 ViewCount = s.ViewCount,
                 SubscribersCount = s.SubscribersCount,
-                TotalTracks = s.Tracks.Count,
-                TotalPlayCount = s.Tracks.Sum(t => (long)(t.PlayCount ?? 0))
+                TotalTracks = s.Tracks.Count(t => t.Status == "Активен"),
+                TotalPlayCount = s.Tracks.Where(t => t.Status == "Активен").Sum(t => (long)(t.PlayCount ?? 0))
             });
 
             return Ok(result);
@@ -62,7 +62,9 @@ namespace NOVER_Back.Controllers
                     ViewCount = singer.ViewCount,
                     SubscribersCount = singer.SubscribersCount
                 },
-                Tracks = singer.Tracks.Select(t => new TrackDTO
+                Tracks = singer.Tracks
+                    .Where(t => t.Status == "Активен")
+                    .Select(t => new TrackDTO
                 {
                     Id = t.Id,
                     Name = t.Name,
@@ -180,6 +182,7 @@ namespace NOVER_Back.Controllers
                 return NotFound("Исполнитель не найден.");
 
             var topTracks = singer.Tracks
+                .Where(t => t.Status == "Активен")
                 .OrderByDescending(t => t.PlayCount ?? 0)
                 .Take(count)
                 .Select(t => new TrackDTO
@@ -205,7 +208,7 @@ namespace NOVER_Back.Controllers
         public async Task<ActionResult<IEnumerable<object>>> GetSimilarSingers(int id)
         {
             var singer = await _context.Singers
-                .Where(s => s.Status == "Активен")   
+                .Where(s => s.Status == "Активен" && s.Id == id)
                 .Include(s => s.Tracks)
                 .ThenInclude(t => t.Genre)
                 .FirstOrDefaultAsync(s => s.Id == id);
@@ -258,6 +261,7 @@ namespace NOVER_Back.Controllers
         public async Task<ActionResult<IEnumerable<AlbumWithTrackDTO>>> GetSingerAlbums(int id)
         {
             var albums = await _context.Albums
+                .Where(a => a.SingerId == id && a.Singer!.Status == "Активен")
                 .Include(a => a.Tracks)
                 .Include(a => a.Singer)
                 .Where(a => a.SingerId == id)
@@ -279,7 +283,9 @@ namespace NOVER_Back.Controllers
                     ViewCount = album.Singer.ViewCount,
                     SubscribersCount = album.Singer.SubscribersCount
                 },
-                Tracks = album.Tracks.Select(t => new TrackDTO
+                Tracks = album.Tracks
+                    .Where(t => t.Status == "Активен")
+                    .Select(t => new TrackDTO
                 {
                     Id = t.Id,
                     Name = t.Name,

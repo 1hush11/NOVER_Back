@@ -26,7 +26,8 @@ namespace NOVER_Back.Controllers
         [HttpGet("genres/{id}")]
         public async Task<ActionResult<Genre>> GetGenreById(int id)
         {
-            var genre = await _context.Genres.FindAsync(id);
+            var genre = await _context.Genres
+                .FirstOrDefaultAsync(g => g.Id == id && g.Status == "Активен");
 
             if (genre == null)
                 return NotFound($"Жанр с ID {id} не найден.");
@@ -47,7 +48,7 @@ namespace NOVER_Back.Controllers
                 return NotFound($"Жанр с ID {id} не найден.");
 
             var result = genre.Tracks
-                .Where(t => t.Status == "Активен")
+                .Where(t => t.Status == "Активен" && t.Singers.All(s => s.Status == "Активен"))
                 .OrderByDescending(t => t.PlayCount)
                 .Take(count)
                 .Select(t => new TrackDTO
@@ -64,7 +65,10 @@ namespace NOVER_Back.Controllers
                     AudioUrl = t.AudioUrl,
                     CoverUrl = t.CoverUrl,
                     Status = t.Status,
-                    Singers = t.Singers.Select(s => s.Name).ToList()
+                    Singers = t.Singers
+                        .Where(s => s.Status == "Активен")
+                        .Select(s => s.Name)
+                        .ToList()
                 }).ToList();
 
 
@@ -74,7 +78,9 @@ namespace NOVER_Back.Controllers
         [HttpGet("genres/{id}/singers")]
         public async Task<ActionResult<IEnumerable<SingerDTO>>> GetSingersByGenre(int id, [FromQuery] int count = 6)
         {
-            var genre = await _context.Genres.FindAsync(id);
+            var genre = await _context.Genres
+                .FirstOrDefaultAsync(g => g.Id == id && g.Status == "Активен");
+
             if (genre == null)
                 return NotFound($"Жанр с ID {id} не найден.");
 
@@ -84,11 +90,12 @@ namespace NOVER_Back.Controllers
                 .ToListAsync();
 
             var singers = tracks
-                .Where(s => s.Status == "Активен")
                 .SelectMany(t => t.Singers)
+                .Where(s => s.Status == "Активен")
                 .Distinct()
                 .Take(count)
                 .ToList();
+
 
             var result = singers.Select(s => new SingerDTO
             {

@@ -20,6 +20,8 @@ public partial class Singer
 
     public string Status { get; set; } = null!;
 
+
+    [JsonIgnore]
     public virtual ICollection<Album> Albums { get; set; } = new List<Album>();
 
     [JsonIgnore]
