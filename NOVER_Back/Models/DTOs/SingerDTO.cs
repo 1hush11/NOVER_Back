@@ -15,5 +15,7 @@ namespace NOVER_Back.Models.DTOs
         public int? ViewCount { get; set; }
 
         public int? SubscribersCount { get; set; }
+
+        public string Status { get; set; } = null!;
     }
 }

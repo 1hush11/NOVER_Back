@@ -290,8 +290,28 @@
   },
   {
     "ContainingType": "NOVER_Back.Controllers.AlbumController",
+    "Method": "GetAlbums",
+    "RelativePath": "api/album/albums",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[NOVER_Back.Models.DTOs.AlbumWithTrackDTO, NOVER_Back, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.AlbumController",
     "Method": "GetAlbumById",
-    "RelativePath": "api/album/album/{id}",
+    "RelativePath": "api/album/albums/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -305,26 +325,6 @@
     "ReturnTypes": [
       {
         "Type": "NOVER_Back.Models.DTOs.AlbumWithTrackDTO",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "NOVER_Back.Controllers.AlbumController",
-    "Method": "GetAlbums",
-    "RelativePath": "api/album/albums",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[NOVER_Back.Models.DTOs.AlbumWithTrackDTO, NOVER_Back, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1088,6 +1088,22 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "AddComplaint",
+    "RelativePath": "api/user/add_complaint",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "complaintDto",
+        "Type": "NOVER_Back.Models.DTOs.ComplaintDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "NOVER_Back.Controllers.UserController",

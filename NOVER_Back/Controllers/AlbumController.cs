@@ -60,14 +60,18 @@ namespace NOVER_Back.Controllers
                         Status = t.Status,
                         Singers = t.Singers
                             .Where(s => s.Status == "Активен")
-                            .Select(s => s.Name)
+                            .Select(s => new SingerDTO
+                            {
+                                Id = s.Id,
+                                Name = s.Name
+                            })
                             .ToList()
                     }).ToList()
             }).ToList();
 
             return Ok(result);
         }
-        [HttpGet("album/{id}")]
+        [HttpGet("albums/{id}")]
         public async Task<ActionResult<AlbumWithTrackDTO>> GetAlbumById(int id)
         {
             var album = await _context.Albums
@@ -111,7 +115,11 @@ namespace NOVER_Back.Controllers
                         Status = t.Status,
                         Singers = t.Singers
                             .Where(s => s.Status == "Активен")
-                            .Select(s => s.Name)
+                            .Select(s => new SingerDTO
+                            {
+                                Id = s.Id,
+                                Name = s.Name
+                            })
                             .ToList()
                     }).ToList()
             };

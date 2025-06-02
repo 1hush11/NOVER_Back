@@ -60,7 +60,14 @@ namespace NOVER_Back.Controllers
                     AudioUrl = t.AudioUrl,
                     CoverUrl = t.CoverUrl,
                     Status = t.Status,
-                    Singers = t.Singers.Select(s => s.Name).ToList()
+                    Singers = t.Singers
+                        .Where(s => s.Status == "Активен")
+                        .Select(s => new SingerDTO
+                        {
+                            Id = s.Id,
+                            Name = s.Name
+                        })
+                        .ToList()
                 }).ToList(),
                 savedCount,
                 isOwner,

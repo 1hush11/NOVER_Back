@@ -43,7 +43,14 @@ namespace NOVER_Back.Controllers
                 AudioUrl = t.AudioUrl,
                 CoverUrl = t.CoverUrl,
                 Status = t.Status,
-                Singers = t.Singers.Select(s => s.Name).ToList()
+                Singers = t.Singers
+                    .Where(s => s.Status == "Активен")
+                    .Select(s => new SingerDTO
+                    {
+                        Id = s.Id,
+                        Name = s.Name
+                    })
+                    .ToList()
             }).ToList();
 
             return Ok(result);
@@ -79,7 +86,9 @@ namespace NOVER_Back.Controllers
                 AudioUrl = track.AudioUrl,
                 CoverUrl = track.CoverUrl,
                 Status = track.Status,
-                Singers = track.Singers.Select(s => s.Name).ToList()
+                Singers = track.Singers
+                    .Select(s => new SingerDTO { Id = s.Id, Name = s.Name })
+                    .ToList()
             };
 
             return Ok(dto);
@@ -123,7 +132,14 @@ namespace NOVER_Back.Controllers
                 AudioUrl = t.AudioUrl,
                 CoverUrl = t.CoverUrl,
                 Status = t.Status,
-                Singers = t.Singers.Select(s => s.Name).ToList()
+                Singers = t.Singers
+                    .Where(s => s.Status == "Активен")
+                    .Select(s => new SingerDTO
+                    {
+                        Id = s.Id,
+                        Name = s.Name
+                    })
+                    .ToList()
             }).ToList();
 
             return Ok(dto);
@@ -175,7 +191,13 @@ namespace NOVER_Back.Controllers
                 Name = track.Name,
                 GenreName = track.Genre?.Name,
                 AlbumTitle = track.Album?.Name,
-                Singers = track.Singers.Select(s => s.Name).ToList(),
+                Singers = track.Singers
+                    .Select(s => new SingerDTO
+                    {
+                        Id = s.Id,
+                        Name = s.Name
+                    })
+                    .ToList(),
                 CoverUrl = track.CoverUrl,
                 AudioUrl = track.AudioUrl,
                 Duration = track.Duration
@@ -231,7 +253,13 @@ namespace NOVER_Back.Controllers
                 AudioUrl = t.AudioUrl,
                 CoverUrl = t.CoverUrl,
                 Status = t.Status,
-                Singers = t.Singers.Select(s => s.Name).ToList()
+                Singers = t.Singers
+                    .Select(s => new SingerDTO
+                    {
+                        Id = s.Id,
+                        Name = s.Name
+                    })
+                    .ToList(),
             }).ToList();
 
             return Ok(result);
@@ -280,7 +308,13 @@ namespace NOVER_Back.Controllers
                 AudioUrl = t.AudioUrl,
                 CoverUrl = t.CoverUrl,
                 Status = t.Status,
-                Singers = t.Singers.Select(s => s.Name).ToList()
+                Singers = t.Singers
+                    .Select(s => new SingerDTO
+                    {
+                        Id = s.Id,
+                        Name = s.Name
+                    })
+                    .ToList(),
             }).ToList();
 
             return Ok(result);

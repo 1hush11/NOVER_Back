@@ -464,7 +464,7 @@
         }
       }
     },
-    "/api/album/album/{id}": {
+    "/api/album/albums/{id}": {
       "get": {
         "tags": [
           "Album"
@@ -2459,6 +2459,37 @@
           }
         }
       }
+    },
+    "/api/user/add_complaint": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComplaintDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComplaintDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComplaintDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2599,11 +2630,27 @@
             "type": "string",
             "nullable": true
           },
-          "track": {
-            "$ref": "#/components/schemas/Track"
-          },
           "user": {
             "$ref": "#/components/schemas/User"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ComplaintDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trackId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2822,6 +2869,10 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2948,13 +2999,13 @@
             "type": "integer",
             "format": "int32"
           },
+          "genreName": {
+            "type": "string",
+            "nullable": true
+          },
           "genreId": {
             "type": "integer",
             "format": "int32",
-            "nullable": true
-          },
-          "genreName": {
-            "type": "string",
             "nullable": true
           },
           "releaseDate": {
@@ -2982,7 +3033,7 @@
           "singers": {
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/SingerDTO"
             },
             "nullable": true
           }

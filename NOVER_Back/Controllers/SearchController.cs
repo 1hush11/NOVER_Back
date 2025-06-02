@@ -41,7 +41,14 @@ namespace NOVER_Back.Controllers
                     AlbumName = t.Album!.Name,
                     AudioUrl = t.AudioUrl,
                     CoverUrl = t.CoverUrl,
-                    Singers = t.Singers.Select(s => s.Name).ToList(),
+                    Singers = t.Singers
+                        .Where(s => s.Status == "Активен")
+                        .Select(s => new SingerDTO
+                        {
+                            Id = s.Id,
+                            Name = s.Name
+                        })
+                        .ToList(),
                     Type = "track"
                 }).ToListAsync();
 

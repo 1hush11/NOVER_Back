@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace NOVER_Back.Models;
 
@@ -17,6 +18,7 @@ public partial class Complaint
 
     public string? Status { get; set; }
 
+    [JsonIgnore]
     public virtual Track? Track { get; set; }
 
     public virtual User? User { get; set; }

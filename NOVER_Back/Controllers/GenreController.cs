@@ -67,7 +67,11 @@ namespace NOVER_Back.Controllers
                     Status = t.Status,
                     Singers = t.Singers
                         .Where(s => s.Status == "Активен")
-                        .Select(s => s.Name)
+                        .Select(s => new SingerDTO
+                        {
+                            Id = s.Id,
+                            Name = s.Name
+                        })
                         .ToList()
                 }).ToList();
 

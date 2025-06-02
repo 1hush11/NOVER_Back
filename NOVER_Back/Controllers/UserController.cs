@@ -201,8 +201,12 @@ namespace NOVER_Back.Controllers
                     Status = t.Status,
                     Singers = t.Singers
                         .Where(s => s.Status == "Активен")
-                        .Select(s => s.Name)
-                        .ToList()
+                        .Select(s => new SingerDTO
+                        {
+                            Id = s.Id,
+                            Name = s.Name
+                        })
+                        .ToList(),
                 })
                 .ToList();
 
@@ -621,7 +625,14 @@ namespace NOVER_Back.Controllers
                 AudioUrl = newTrack.AudioUrl,
                 CoverUrl = newTrack.CoverUrl,
                 Status = newTrack.Status,
-                Singers = newTrack.Singers.Select(s => s.Name).ToList()
+                Singers = newTrack.Singers
+                    .Where(s => s.Status == "Активен")
+                    .Select(s => new SingerDTO
+                    {
+                        Id = s.Id,
+                        Name = s.Name
+                    })
+                    .ToList()
             };
 
             return Ok(result);
@@ -825,7 +836,14 @@ namespace NOVER_Back.Controllers
                     AudioUrl = t.AudioUrl,
                     CoverUrl = t.CoverUrl,
                     Status = t.Status,
-                    Singers = t.Singers.Select(s => s.Name).ToList()
+                    Singers = t.Singers
+                        .Where(s => s.Status == "Активен")
+                        .Select(s => new SingerDTO
+                        {
+                            Id = s.Id,
+                            Name = s.Name
+                        })
+                        .ToList()
                 })
                 .ToList();
 
@@ -931,7 +949,7 @@ namespace NOVER_Back.Controllers
         {
             var userId = GetCurrentUserId();
             if (userId == null)
-                return Unauthorized("Пользователь не авторизован.");
+                return Unauthorized();
 
             var existingComment = await _context.Comments.FirstOrDefaultAsync(c => c.UserId == userId && c.TrackId == review.TrackId);
 
@@ -941,6 +959,40 @@ namespace NOVER_Back.Controllers
 
             await _context.SaveChangesAsync();
             return Ok("Комментарий заблокирован.");
+        }
+
+        [HttpPost("add_complaint")]
+        public async Task<IActionResult> AddComplaint([FromBody] ComplaintDTO complaintDto)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized();
+
+            var track = await _context.Tracks.FindAsync(complaintDto.TrackId);
+            if (track == null)
+                return NotFound($"Трек с ID {complaintDto.TrackId} не найден.");
+
+            var alreadyComplained = await _context.Complaints
+                .AnyAsync(c => c.UserId == userId.Value && c.TrackId == complaintDto.TrackId);
+            if (alreadyComplained)
+                return BadRequest("Вы уже отправляли жалобу на этот трек.");
+
+            if (string.IsNullOrWhiteSpace(complaintDto.Content))
+                return BadRequest("Текст жалобы не может быть пустым.");
+
+            var complaint = new Complaint
+            {
+                UserId = userId.Value,
+                TrackId = complaintDto.TrackId,
+                Content = complaintDto.Content.Trim(),
+                CreatedAt = DateTime.UtcNow.ToLocalTime(),
+                Status = "На рассмотрении" 
+            };
+
+            _context.Complaints.Add(complaint);
+            await _context.SaveChangesAsync();
+
+            return Ok(complaint);
         }
 
         private int? GetCurrentUserId()
