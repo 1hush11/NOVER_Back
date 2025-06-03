@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using NOVER_Back.Models;
 using NOVER_Back.Models.DTOs;
 
@@ -110,6 +111,7 @@ namespace NOVER_Back.Controllers
 
             return Ok("Трек одобрен");
         }
+
         [HttpPost("track/reject/{id}")]
         public async Task<IActionResult> RejectTrack(int id)
         {
@@ -139,6 +141,7 @@ namespace NOVER_Back.Controllers
 
             return Ok("Исполнитель и его треки заблокированы.");
         }
+
         [HttpPost("singer/unblock/{id}")]
         public async Task<IActionResult> UnblockSinger(int id)
         {
@@ -168,6 +171,7 @@ namespace NOVER_Back.Controllers
             await _context.SaveChangesAsync();
             return Ok("Комментарий удалён.");
         }
+
         [HttpPut("comment/unblock/{id}")]
         public async Task<IActionResult> UblockComment(int id)
         {
@@ -253,7 +257,6 @@ namespace NOVER_Back.Controllers
                     Content = c.Content,
                     CreatedAt = c.CreatedAt
                 })
-                .OrderBy(c => c.Id)
                 .ToListAsync();
 
             return Ok(complaints);
@@ -270,6 +273,7 @@ namespace NOVER_Back.Controllers
             await _context.SaveChangesAsync();
             return Ok("Жалоба заблокирована.");
         }
+
         [HttpPut("complaint/unblock/{id}")]
         public async Task<IActionResult> UnblockComplaint(int id)
         {
@@ -281,6 +285,7 @@ namespace NOVER_Back.Controllers
             await _context.SaveChangesAsync();
             return Ok("Жалоба заблокирована.");
         }
+
         [HttpPut("complaint/approve/{id}")]
         public async Task<IActionResult> ApproveComplaint(int id)
         {
@@ -297,12 +302,11 @@ namespace NOVER_Back.Controllers
         public async Task<IActionResult> GetBlockedFeedback()
         {
             var feedback = await _context.Ratings
-                .OrderBy(r => r.UserId)
                 .Include(r => r.User)
                 .Include(r => r.Track)
                     .ThenInclude(t => t.Singers)
                 .Join(
-                    _context.Comments.Where(c => c.Status == "Заблокирован"),
+                    _context.Comments.Where(c => c.Status == "Заблокирован").OrderBy(c => c.CreatedAt),
                     r => new { r.TrackId, r.UserId },
                     c => new { c.TrackId, c.UserId },
                     (r, c) => new
@@ -318,6 +322,7 @@ namespace NOVER_Back.Controllers
                         RatingValue = r.Rating1,
                         CommentText = c.CommentText,
                         CommentCreatedAt = c.CreatedAt,
+                        CommentStatus = c.Status,
                         TotalBlockedCommentsByUser = _context.Comments
                                               .Count(cc => cc.UserId == r.UserId
                                                          && cc.Status == "Заблокирован")
@@ -409,6 +414,53 @@ namespace NOVER_Back.Controllers
             }
 
             return Ok("Жанровые плейлисты обновлены.");
+        }
+
+        [HttpGet("bad_words")]
+        public IActionResult GetBadWords()
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "badWords.json");
+
+            if (!System.IO.File.Exists(filePath))
+                return NotFound("Файл badWords.json не найден.");
+
+            var json = System.IO.File.ReadAllText(filePath);
+            var words = JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
+
+            return Ok(words);
+        }
+
+        [HttpPost("bad_words")]
+        public IActionResult AddBadWord([FromBody] string word)
+        {
+            if (string.IsNullOrWhiteSpace(word))
+                return BadRequest("Слово не должно быть пустым.");
+
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "badWords.json");
+
+            List<string> words;
+
+            if (System.IO.File.Exists(filePath))
+            {
+                var json = System.IO.File.ReadAllText(filePath);
+                words = JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
+            }
+            else
+            {
+                words = new List<string>();
+            }
+
+            var cleanWord = word.Trim().ToLower();
+
+            if (words.Contains(cleanWord))
+                return Conflict("Слово уже есть в списке.");
+
+            words.Add(cleanWord);
+
+            var updatedJson = JsonSerializer.Serialize(words, new JsonSerializerOptions { WriteIndented = true });
+            System.IO.File.WriteAllText(filePath, updatedJson);
+
+            return Ok("Слово добавлено.");
         }
     }
 }

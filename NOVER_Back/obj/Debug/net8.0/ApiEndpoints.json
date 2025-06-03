@@ -1,6 +1,32 @@
 [
   {
     "ContainingType": "NOVER_Back.Controllers.AdminController",
+    "Method": "GetBadWords",
+    "RelativePath": "api/admin/bad_words",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.AdminController",
+    "Method": "AddBadWord",
+    "RelativePath": "api/admin/bad_words",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "word",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.AdminController",
     "Method": "GetBlockedFeedback",
     "RelativePath": "api/admin/blocked_feedback",
     "HttpMethod": "GET",
@@ -1416,6 +1442,22 @@
       {
         "Name": "review",
         "Type": "NOVER_Back.Models.DTOs.ReviewDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NOVER_Back.Controllers.UserController",
+    "Method": "ReviewExists",
+    "RelativePath": "api/user/review_exists/{trackId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trackId",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],

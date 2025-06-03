@@ -944,6 +944,19 @@ namespace NOVER_Back.Controllers
             return Ok("Отзыв обновлён.");
         }
 
+        [HttpGet("review_exists/{trackId}")]
+        public async Task<IActionResult> ReviewExists(int trackId)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized("Пользователь не авторизован.");
+
+            var hasReview = await _context.Ratings
+                .AnyAsync(r => r.UserId == userId && r.TrackId == trackId);
+
+            return Ok(hasReview);
+        }
+
         [HttpPost("block_review")]
         public async Task<IActionResult> BlockReview([FromBody] ReviewDTO review)
         {
