@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NOVER_Back.Models;
+using TagLib.Matroska;
 
 namespace NOVER_Back.Controllers
 {
@@ -29,7 +30,11 @@ namespace NOVER_Back.Controllers
                     TrackName = c.Track.Name,
                     User = c.User.Username,
                     Comment = c.CommentText,
-                    CreatedAt = c.CreatedAt
+                    CreatedAt = c.CreatedAt,
+                    Rating = _context.Ratings
+                        .Where(r => r.TrackId == c.TrackId && r.UserId == c.UserId)
+                        .Select(r => r.Rating1)
+                        .FirstOrDefault()
                 })
                 .ToListAsync();
 

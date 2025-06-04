@@ -716,7 +716,9 @@ namespace NOVER_Back.Controllers
             if (user == null)
                 return NotFound("Пользователь не найден.");
 
-            var result = user.Singers.Select(s => new SingerDTO
+            var result = user.Singers
+                .Where(s => s.Status == "Активен")
+                .Select(s => new SingerDTO
             {
                 Id = s.Id,
                 Name = s.Name,

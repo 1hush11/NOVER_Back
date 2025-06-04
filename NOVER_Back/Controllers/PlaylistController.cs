@@ -48,7 +48,9 @@ namespace NOVER_Back.Controllers
                 playlist.Type,
                 Creator = playlist.Creator?.Username,
                 CreatorRole = playlist.Creator?.Role,
-                Tracks = playlist.Tracks.Select(t => new TrackDTO
+                Tracks = playlist.Tracks
+                    .Where(t => t.Status == "Активен" && t.Singers.All(s => s.Status == "Активен"))
+                    .Select(t => new TrackDTO
                 {
                     Id = t.Id,
                     Name = t.Name,
@@ -61,13 +63,13 @@ namespace NOVER_Back.Controllers
                     CoverUrl = t.CoverUrl,
                     Status = t.Status,
                     Singers = t.Singers
-                        .Where(s => s.Status == "Активен")
-                        .Select(s => new SingerDTO
-                        {
-                            Id = s.Id,
-                            Name = s.Name
-                        })
-                        .ToList()
+                            .Where(s => s.Status == "Активен")
+                            .Select(s => new SingerDTO
+                            {
+                                Id = s.Id,
+                                Name = s.Name
+                            })
+                            .ToList()
                 }).ToList(),
                 savedCount,
                 isOwner,
